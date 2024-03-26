@@ -10,7 +10,10 @@ L'idée est de présenter les projections par mois ou par année à l'horizon 20
 
 Nous allons nous inspirer de cartes interactives qui ont déjà été faites par le NCCS et par la Confédération que vous pouvez retrouver [ici](https://hydromapscc.ch/#fr/8/46.483/6.949/bl_hds--k01_k010001_rcp26_1995_00_medv0_1$531--k02_k020001_rcp26_1995_00_medv0_1$0/NULL).
 
+### Exemple de carte des précipitations 
 ![Carte des précipitations futures](precipitations.png)
+
+### Exemple de carte des températures 
 ![Carte des températures futures](temperatures.png)
 
 Nous aimerions également, dans un deuxième temps, évaluer l'impact des précipitations et des températures futurs sur la production fourragère dans les alpages suisses, soit aussi sous la forme d'une carte interactive, ou bien sous la forme de graphiques. 
