@@ -22,3 +22,7 @@ Sur la carte, on pensait mettre la carte de la Suisse avec sur le côté les ong
 On a aussi l'idée de pouvoir zoomer selon les différentes régions. On ne sait cependant pas encore exactement comment ça sera. Cela dépend des données à disposition. On se demande aussi si on sélectionne tous les cantons ou si on se focalise sur l'ouest de la Suisse (suisse romande) pour avoir des données potentiellement plus précises.
 
 A voir comment on fera la map: js, d3?
+
+# Cours du 17.04.2024
+
+Nous avons fait signé le document à M.Kaiser que nous allons envoyé à météoSuisse. 
