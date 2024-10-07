@@ -30,3 +30,6 @@ Données sur les précipitations sur le site de la [Confédération suisse](http
 ## Projection des températures dans le futur 
 
 Données sur les températures : encore à trouver
+
+## Données
+Nous avons envoyé un mail à météosuisse afin de comprendre comment lire les différentes données. Nous avons aussi choisis de nous restreindre dans un premier temps a la température et les précipitations. De plus, nous voulions changer le nombres d'onglets de possibiités en ce qui concerne les choix de probabilité. 

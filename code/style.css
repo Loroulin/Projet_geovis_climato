@@ -1,1 +1,75 @@
-style.css
+body {
+    font-family: Arial, sans-serif; /* Police de la page */
+    background-color: #f0f0f0; /* Couleur de fond */
+    margin: 0; /* Supprime les marges par défaut */
+    padding: 0; /* Supprime le padding par défaut, soit l'espace intérieur*/
+    display: flex; /* Utilisation de flexbox pour l'alignement */
+    flex-direction: column; /* Empile les éléments verticalement */
+}
+
+h1 {
+    font-size: 30px;
+    color: #3B4E44;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    margin-left: 10px;
+}
+
+h2 {
+    font-size: 15px;
+    color: #735D51;
+    margin-top: 0px;
+    margin-bottom: 5px;
+    margin-left: 10px;
+}
+
+.container {
+    display: flex;
+    justify-content: center;
+    margin-top: 10px;
+    height: calc(100vh - 120px); /* Hauteur du conteneur */
+    width: 100%; /* Prend 100% de la largeur */
+    padding: 5px;
+    box-sizing: border-box;
+}
+
+.container div {
+    flex: 1 1 auto; /* Chaque box prend une part égale de l'espace */
+    height: 100%; /* Hauteur flexible, remplit la hauteur du parent */
+    margin: 2px;
+}
+
+.container div:nth-child(1) {
+    flex: 2 1 15%;
+    background-color: #d4c9c9;
+}
+
+.container div:nth-child(2) {
+    flex: 1 1 70%;
+    background-color: #eee8e8;
+}
+
+.container div:nth-child(3) {
+    flex: 1 1 15%;
+    background-color: #d4c9c9;
+}
+
+.info {
+    background-color: #fff400;
+}
+
+.map {
+    background-color: #3B4E44;
+}
+
+.legend {
+    background-color: #517b58;
+}
+
+.footer {
+    background-color: #d4c9c9;
+    height: 20px;
+    padding: 0px;
+    margin-left: 8px;
+    margin-right: 8px;
+}
