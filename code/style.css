@@ -10,17 +10,13 @@ body {
 h1 {
     font-size: 30px;
     color: #3B4E44;
-    margin-top: 5px;
-    margin-bottom: 5px;
-    margin-left: 10px;
+    margin: 5px 10px;
 }
 
 h2 {
     font-size: 15px;
     color: #735D51;
-    margin-top: 0px;
-    margin-bottom: 5px;
-    margin-left: 10px;
+    margin: 0 10px 5px 10px;
 }
 
 .container {
@@ -33,25 +29,15 @@ h2 {
     box-sizing: border-box;
 }
 
-.container div {
-    flex: 1 1 auto; /* Chaque box prend une part égale de l'espace */
-    height: 100%; /* Hauteur flexible, remplit la hauteur du parent */
-    margin: 2px;
+.side {
+    flex: 2 1 15%; /* Pour les colonnes latérales */
+    background-color: #d4c9c9; /* Couleur de fond */
 }
 
-.container div:nth-child(1) {
-    flex: 2 1 15%;
-    background-color: #d4c9c9;
-}
-
-.container div:nth-child(2) {
-    flex: 1 1 70%;
-    background-color: #eee8e8;
-}
-
-.container div:nth-child(3) {
-    flex: 1 1 15%;
-    background-color: #d4c9c9;
+.main {
+    flex: 1 1 70%; /* Pour la carte principale */
+    background-color: transparent; /* Couleur de fond */
+    position: relative; /* Positionnement relatif pour les éléments enfants */
 }
 
 .info {
@@ -60,6 +46,37 @@ h2 {
 
 .map {
     background-color: #3B4E44;
+    position: relative;
+}
+.zoom-control {
+    display: flex;
+    flex-direction: column; /* Empile les boutons verticalement */
+    position: absolute; /* Changez à 'absolute' pour le positionner par rapport à son conteneur parent */
+    bottom: 20px; /* Positionne le conteneur à 20px du bas */
+    right: 10px; /* Positionne le conteneur à 10px de la droite */
+    z-index: 1000; /* S'assure qu'il est au-dessus de tout autre contenu */
+}
+
+.zoom-in-button,
+.zoom-out-button {
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin: 2.5px 0;
+    cursor: pointer; /* Change le curseur sur hover */
+    width: 30px;
+    height: 30px;
+    font-size: 18px;
+}
+
+.leaflet-control-attribution {
+    background-color: rgba(255, 255, 255, 0.9);
+    padding: 5px;
+    border-radius: 5px;
+    font-size: 12px;
+    position: absolute;
+    bottom: 20px;
+    left: 10px;
 }
 
 .legend {
