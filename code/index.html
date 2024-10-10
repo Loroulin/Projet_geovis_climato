@@ -15,9 +15,94 @@
     <h1>Evolution des facteurs climatiques </h1>
     <h2>Etat actuel et projeté des précipitations et des températures suisses</h2>
     <div class="container">
-        <div class = "side" id="info"></div>
+        <div class = "left" id="info">
+          <div class="origin">
+            <h3> Visualiser: </h3>
+            <div id="climatic-factor">
+              <label for="data-selection">Facteur climatique :</label>
+              <select id="data-selection">
+                <option value="precipitation">Précipitation</option>
+                <option value="temperature">Température</option>
+              </select>
+            </div>
+            <div id="year">
+              <label for="year-selection">Année :</label>
+              <select id="year-selection">
+                <option value="91-10">1991 - 2010 </option>
+                <option value="20-49">2020 - 2049</option>
+              </select>
+            </div>
+            <div id="month">
+              <label for="month-selection">Mois :</label>
+              <select id="month-selection">
+                <option value="Januar">Janvier </option>
+                <option value="Februar">Février</option>
+                <option value="March">Mars</option>
+                <option value="April">Avril</option>
+                <option value="May">Mai</option>
+                <option value="June">Juin</option>
+                <option value="July">Juillet</option>
+                <option value="August">Août</option>
+                <option value="September">Septembre</option>
+                <option value="October">Octobre</option>
+                <option value="November">Novembre</option>
+                <option value="December">Décembre</option>
+              </select>
+            </div>
+            <div id="scenario">
+              <label for="scenario-selection">Scénario :</label>
+              <select id="scenario-selection">
+                <option value="8.5">RCP 2.6 </option>
+                <option value="4.5">RCP 4.5</option>
+                <option value="8.5">RCP 8.5</option>
+              </select>
+            </div>
+          </div>
+          <div class = "comparison">
+            <h4> Comparer avec: </h4>
+            <div id="comparison-climatic-factor">
+              <label for="comparison-data-selection">Facteur climatique :</label>
+              <select id="comparison-data-selection">
+                <option value="comparison-precipitation">Précipitation</option>
+                <option value="comparison-temperature">Température</option>
+              </select>
+            </div>
+            <div id="comparison-year">
+              <label for="comparison-year-selection">Année :</label>
+              <select id="comparison-year-selection">
+                <option value="comparison-91-10">1991 - 2010 </option>
+                <option value="comparison-20-49">2020 - 2049</option>
+              </select>
+            </div>
+            <div id="comparison-month">
+              <label for="comparison-month-selection">Mois :</label>
+              <select id="comparison-month-selection">
+                <option value="comparison-Januar">Janvier </option>
+                <option value="comparison-Februar">Février</option>
+                <option value="comparison-March">Mars</option>
+                <option value="comparison-April">Avril</option>
+                <option value="comparison-May">Mai</option>
+                <option value="comparison-June">Juin</option>
+                <option value="comparison-July">Juillet</option>
+                <option value="comparison-August">Août</option>
+                <option value="comparison-September">Septembre</option>
+                <option value="comparison-October">Octobre</option>
+                <option value="comparison-November">Novembre</option>
+                <option value="comparison-December">Décembre</option>
+              </select>
+            </div>
+            <div id="comparison-scenario">
+              <label for="comparison-scenario-selection">Scénario :</label>
+              <select id="comparison-scenario-selection">
+                <option value="comparison-8.5">RCP 2.6 </option>
+                <option value="comparison-4.5">RCP 4.5</option>
+                <option value="comparison-8.5">RCP 8.5</option>
+              </select>
+            </div>
+          </div>
+        </div>
         <div class = "main" id="map"></div>
-        <div class = "side" id="legend"></div>
+        <div class = "right" id="legend"></div>
     </div>
     <div class="footer">Sources à définir</div>
   </body>
