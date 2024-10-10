@@ -29,13 +29,17 @@ h2 {
     box-sizing: border-box;
 }
 
-.side {
-    flex: 2 1 15%; /* Pour les colonnes latérales */
-    background-color: #d4c9c9; /* Couleur de fond */
+.left {
+    flex: 2 1 15%; 
+    background-color: #d4c9c9;
+}
+.right {
+    flex: 2 1 20%; 
+    background-color: #d4c9c9;
 }
 
 .main {
-    flex: 1 1 70%; /* Pour la carte principale */
+    flex: 1 1 65%; /* Pour la carte principale */
     background-color: transparent; /* Couleur de fond */
     position: relative; /* Positionnement relatif pour les éléments enfants */
 }

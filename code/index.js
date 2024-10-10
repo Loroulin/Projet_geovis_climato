@@ -42,3 +42,32 @@ document.addEventListener('DOMContentLoaded', function() {
   var attributionControl = L.control.attribution({ position: 'bottomleft' });
   attributionControl.addTo(map);
 });
+
+// Ajout de l'interactivité lors du choix dans le div "data-selection" --> ajout d'une légende dans le div "right"
+document.addEventListener('DOMContentLoaded', function() {
+  const dataSelection = document.getElementById('data-selection');
+  const legendDiv = document.getElementById('legend');
+
+  function updateLegend() {
+    const selectedValue = dataSelection.value;
+    legendDiv.innerHTML = '';
+
+    if (selectedValue === 'precipitation') { //si sélection de précipitation cette légende apparaît, sinon cf.2ème partie
+      legendDiv.innerHTML = `
+        <h3>Scénarios des précipitations jusqu'en 2050 </h3>
+        <p>Texte pour précipitation.</p>
+        <img src="path/to/precipitation-image.jpg" alt="Légende de précipitation" style="width:100%;">
+      `;
+    } else if (selectedValue === 'temperature') { //sinon légende de température
+      legendDiv.innerHTML = `
+        <h3>Scénarios des températures jusqu'en 2050 </h3>
+        <p>Texte pour température</p>
+        <img src="path/to/temperature-image.jpg" alt="Légende de température" style="width:100%;">
+      `;
+    }
+  }
+
+  dataSelection.addEventListener('change', updateLegend);
+  updateLegend();
+});
+
