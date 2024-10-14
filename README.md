@@ -1,35 +1,69 @@
-# Projet de Géovisualisation 
+# Qu'est-ce que la map
+La map crée permet de sélectionner sur la gauche des facteurs climatiques (précipitation et température) pour les années 1991-2010 ou pour les années 2020 à 2049. Ainsi, ces deux références de temps pourront aussi être analysées en fonction des mois. Ainsi, nous pouvons sélectionner la moyenne annuelle des différents mois pour les deux références de temps. De plus, il est possible de voir l'évolution des précipitations et des températures en fonction des différents RCP2,6 RCP4,5 et RCP8,5. Il y a alors un 84 cartes à disposition. Lorsque la sélection est faite, des informations et légendes apparaissent dans la partie droite de la carte.
 
-Lorena Roulin et Marine Fiora
+Ensuite, il est possible de comparer plusieurs de ces cartes en sélectionnant dans la partie "comparez avec" une autre année de référence, un autre mois ou un autre RCP. Il est ainsi possible de les comparer grâce à un curseur. 
 
-Université de Lausanne, Mars 2024
+# Lire le html
+Le html est crée en plusieurs parties avec une partie <head> et le <body>. 
 
-## Introduction
+## Head 
 
-Nous prévoyons de réaliser une carte interactive qui présente l'évolution des précipitations et des températures dans le futur à l'échelle de la Suisse, selon les différents scénarios du GIEC. 
+Le head permet de configurer les informations de base sur la page web. 
+- <meta charset="utf8" /> qui permet l'encodage des caractères utilisés sur la page. 
+- <title> Titre </title> permet de mettre le titre 
+- <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" /> charge une feuille de style CSS
+- <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script> charge un fichier javascript
+- <script src="index.js"></script> permet de crée le lien avec notre fichier javascript
+- <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" /> permet de lier notre fichier css. 
 
-L'idée est de présenter les projections par mois ou par année à l'horizon 2050, en fonction de la période de référence de 1981-2010. 
-
-Nous allons nous inspirer de cartes interactives qui ont déjà été réalisées par le NCCS et par la Confédération que vous pouvez retrouver [ici](https://hydromapscc.ch/#fr/8/46.483/6.949/bl_hds--k01_k010001_rcp26_1995_00_medv0_1$531--k02_k020001_rcp26_1995_00_medv0_1$0/NULL).
-
-### Exemple de carte des précipitations 
-
-![Carte des précipitations futures](precipitations.png)
-
-### Exemple de carte des températures 
-
-![Carte des températures futures](temperatures.png)
-
-Nous aimerions également, dans un deuxième temps, évaluer l'impact des précipitations et des températures futures sur la production fourragère dans les alpages suisses, soit aussi sous la forme d'une carte interactive, ou bien sous la forme de graphiques. 
+  <head>
+    <meta charset="utf8" />
+    <title>Projet Géovisualisation 2</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+    <script src="index.js"></script>
+    <link rel="stylesheet" href="style.css" />
+  </head>
 
 
-## Projection des précipitations dans le futur 
+## Body
+Tout au sommet du body se trouvent les premiers titres: le titre principal appelé <h1></h1> puis le titre secondaire avec <h2></h2>. Y apparaissent deux div différents: le "container" dans lequel se trouve la partie interactive et la map ainsi que le "footer" avec les différentes sources.
 
-Données sur les précipitations sur le site de la [Confédération suisse](https://www.bafu.admin.ch/). 
+### Container
 
-## Projection des températures dans le futur 
+Sous le titre se trouve ensuite un div appelé "container", celui-ci est composé de trois parties: une partie à droite appelée "left", la partie centrale appartie "map" puis une partie à gauche appelée "right".
 
-Données sur les températures : encore à trouver
+#### La partie "left" 
+est la partie dans laquelle se trouve les différents menus déroulants et pour le choix de base et pour les choix de comparaison. Il y a ainsi deux div différents: celui appelé "origin" et le second "comparison". 
 
-## Données
-Nous avons envoyé un mail à météosuisse afin de comprendre comment lire les différentes données. Nous avons aussi choisis de nous restreindre dans un premier temps a la température et les précipitations. De plus, nous voulions changer le nombres d'onglets de possibiités en ce qui concerne les choix de probabilité. 
+Dans chacun de ces deux div se trouvent alors les différents menus à choix. La première est appelée "climatic-factor" et permet de sélectionner ou la température ou la précipitation. Le deuxième est la sélection de l'année de référence, soit la "year", ensuite se trouve la sélection des mois pour lesquels la moyenne mensuels s'afficheront et sont alors notés "month" puis le scenario nommé "scenario". Exactement la même structure se trouve pour la partie comparaison. Afin d'éviter la redondance, le terme "comparison" est ajouté avant chacune des catégories qui deviennent alors "comparison-climatic-factor", "comparison-year", "comparison-month" et "comparison-scenario".
+
+Chacune des classes est notées de la même manière sur le html et a cette structure: 
+
+<body>
+ <div id="climatic-factor">
+ <label for="data-selection">Facteur climatique :</label>
+ <select id="data-selection">
+ 	<option value="precipitation">Précipitation</option>
+    <option value="temperature">Température</option>
+ </select>
+ </div>
+</body>
+
+Il est ainsi possible de modifier le nombre d'option dans le menu déroulant en ajoutant une <option value = " "> Nom de l'option </option>. 
+
+#### La partie "map" 
+est la partie dans laquel s'affichera la map ainsi que les différentes cartes. Il n'y a rien d'autre pour l'instant à part la carte. 
+
+#### La partie "right" 
+est celle dans laquelle s'affichent les différentes légendes. Il n'y a rien d'autre pour l'instant à part le div de base.
+
+### Footer
+Cette partie verra les différentes sources. 
+
+
+# Lire le CSS
+
+
+
+# Lire le JS
