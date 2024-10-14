@@ -16,15 +16,14 @@ Le head permet de configurer les informations de base sur la page web.
 - <script src="index.js"></script> permet de crée le lien avec notre fichier javascript
 - <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" /> permet de lier notre fichier css. 
 
-  <head>
-    <meta charset="utf8" />
-    <title>Projet Géovisualisation 2</title>
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
-    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
-    <script src="index.js"></script>
-    <link rel="stylesheet" href="style.css" />
-  </head>
-
+-<head>
+---<meta charset="utf8" />
+---<title>Projet Géovisualisation 2</title>
+---<link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+---<script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+---<script src="index.js"></script>
+---<link rel="stylesheet" href="style.css" />
+-</head>
 
 ## Body
 Tout au sommet du body se trouvent les premiers titres: le titre principal appelé <h1></h1> puis le titre secondaire avec <h2></h2>. Y apparaissent deux div différents: le "container" dans lequel se trouve la partie interactive et la map ainsi que le "footer" avec les différentes sources.
@@ -40,15 +39,15 @@ Dans chacun de ces deux div se trouvent alors les différents menus à choix. La
 
 Chacune des classes est notées de la même manière sur le html et a cette structure: 
 
-<body>
- <div id="climatic-factor">
- <label for="data-selection">Facteur climatique :</label>
- <select id="data-selection">
- 	<option value="precipitation">Précipitation</option>
-    <option value="temperature">Température</option>
- </select>
- </div>
-</body>
+-<body>
+--<div id="climatic-factor">
+--<label for="data-selection">Facteur climatique :</label>
+--<select id="data-selection">
+----<option value="precipitation">Précipitation</option>
+----<option value="temperature">Température</option>
+--</select>
+--</div>
+-</body>
 
 Il est ainsi possible de modifier le nombre d'option dans le menu déroulant en ajoutant une <option value = " "> Nom de l'option </option>. 
 
