@@ -62,7 +62,53 @@ Cette partie verra les différentes sources.
 
 
 # Lire le CSS
+## Les polices 
+Pour commencer, les différents styles ont étés formatés: le body, h1, h2 et h3. Ce sont respectivement la police de base (body) ainsi que les différents titres. Les principales éléments sont: 
 
+ font-family: permet de choisir la police de la page
+ font-weight: met le style que l'on veut, comme le gras ou l'italique
+ background-color: la couleur de fond
+ color: la couleur de la police
+ margin: la taille des marges
+ padding: l'espace à l'intérieur
+ display flex: cela transforme l'élément en conteneur flexible, et ses enfants directs deviennent des éléments flexibles.
+ flex-direction column: permet d'empiler les eléments verticalement
+
+## Le centre
+Les trois blocs du "container" sont séparés en trois avec chacun un style différent.
+
+.left
+.main
+.right
+
+Deux des blocs sont codés avec flex: 2 1 n% qui permet à un élément de commencer à une taille de n% du conteneur, de s'agrandir pour occuper deux fois plus d'espace que les autres éléments, et de rétrécir si nécessaire en fonction de l'espace disponible. L'élément central, plus grand est inscrit flex 1 1 n% qui permet à un élément de commencer à une taille de 65% du conteneur, de s'agrandir et de rétrécir de manière égale aux autres éléments selon l'espace disponible.
+
+ Chacune de ses parties ont un style différent. 
+
+### La partie gauche
+Dans la partie gauche se trouve les menus à choix. 
+
+ .origin : style du div
+    .origin h3 il y a aussi un style pour le titre du div
+    .comparison h3 il y a aussi un style pour le titre du div
+ .left label : style des label des menus déroulants
+ .left select : style des menus déroulants
+
+
+### Le centre
+Dans cette partie se trouve la map et ci-dessus se trouve les boutons qui permettent le zoom in et out. 
+
+ .zoom-control
+ .zoom-in-button
+ .zoom-out-button 
+
+Il y a aussi le style pour l'attribution de leaflet.
+.leaflet-control-attribution
+
+### La partie droite
+
+
+## Le footer
 
 
 # Lire le JS
