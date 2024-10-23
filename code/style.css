@@ -118,8 +118,8 @@ h3 {
 
 .footer {
     background-color: #d4c9c9;
-    height: 25px; /* Peut être ajusté si nécessaire */
-    padding: 10px; /* Ajuster si besoin */
-    margin: 5 0px; /* Doit correspondre à la marge du conteneur */
-    box-sizing: border-box; /* S'assure que le padding et la marge sont pris en compte dans la largeur totale */
+    height: 25px;
+    padding: 10px;
+    margin: 5 0px;
+    box-sizing: border-box; 
 }

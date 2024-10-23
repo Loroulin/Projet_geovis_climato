@@ -1,50 +1,71 @@
 document.addEventListener('DOMContentLoaded', function() {
-  // Créer une carte centrée sur la Suisse
+  // Initialisation de la carte
   var map = L.map('map', {
-    center: [46.8182, 8.2275],
+    center: [46.8, 8.2275],
     zoom: 8,
     zoomControl: false // Désactive les boutons de zoom par défaut
   });
 
   // Limiter la carte à la Suisse
-  map.setMaxBounds([[45.902, 3.931], [47.932, 11.3235]]);
+  map.setMaxBounds([[45.5, 5.0], [48.0, 11.5]]);
   map.setMinZoom(8);
 
-  // Ajouter un fond de carte OpenStreetMap
-  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-  }).addTo(map);
+  // Définir les différentes couches de base:
+  var topoEsri = L.tileLayer('https://services.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}', {
+    attribution: '&copy; <a href="http://www.esri.com">Esri</a>, HERE, Garmin, Intermap, increment P Corp., GEBCO, USGS, FAO, NPS, NRCAN, GeoBase, IGN, Kadaster NL, Ordnance Survey, Esri Japan, METI, Esri China (Hong Kong), (c) OpenStreetMap contributors, and the GIS User Community'
+  });
+  
+  var osmLayer = L.tileLayer('https://{s}.tile.osm.org/{z}/{x}/{y}.png', {
+    attribution: '&copy; <a href="https://openstreetmap.org">OpenStreetMap</a> contributors'
+  });
+  
+  var Esri_WorldGrayCanvas = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Base/MapServer/tile/{z}/{y}/{x}', {
+    attribution: 'Tiles &copy; Esri &mdash; Esri, DeLorme, NAVTEQ',
+  });
+  
+  var esriImagery = L.tileLayer(
+    'http://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+      attribution: '&copy; <a href="http://www.esri.com">Esri</a>, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community'
+    }
+  );
 
-  // Créer un conteneur pour les boutons de zoom
+  osmLayer.addTo(map); // OSM comme couche par défaut. 
+
+  // Créer les boutons pour changer la couche de base / contrôle des couches
+  var baseLayers = {
+    "ESRI": topoEsri,
+    "OpenStreetMap": osmLayer,
+    "Noir et Blanc": Esri_WorldGrayCanvas,
+    "Photos aériennes ESRI": esriImagery,
+  };
+
+  var overlays = {}; // ajouter des couches superposées si nécessaire
+  L.control.layers(baseLayers, overlays).addTo(map);
+
+  // Création des boutons de zoom personnalisés
   var zoomControl = L.control({ position: 'bottomright' });
-  zoomControl.onAdd = function () {
-    var container = L.DomUtil.create('div', 'zoom-control'); // Crée un conteneur pour les boutons
+  
+  zoomControl.onAdd = function() {
+    var container = L.DomUtil.create('div', 'zoom-control');
 
-    // Bouton de zoom avant
     var zoomInButton = L.DomUtil.create('button', 'zoom-in-button', container);
     zoomInButton.innerHTML = '+';
-    zoomInButton.onclick = function () {
+    zoomInButton.onclick = function() {
       map.zoomIn();
     };
 
-    // Bouton de zoom arrière
     var zoomOutButton = L.DomUtil.create('button', 'zoom-out-button', container);
     zoomOutButton.innerHTML = '-';
-    zoomOutButton.onclick = function () {
+    zoomOutButton.onclick = function() {
       map.zoomOut();
     };
 
-    return container; // Retourne le conteneur avec les boutons
+    return container;
   };
-  zoomControl.addTo(map);
 
-  // Activer l'attribution de Leaflet
-  var attributionControl = L.control.attribution({ position: 'bottomleft' });
-  attributionControl.addTo(map);
-});
+  zoomControl.addTo(map); 
 
-// Ajout de l'interactivité lors du choix dans le div "data-selection" --> ajout d'une légende dans le div "right"
-document.addEventListener('DOMContentLoaded', function() {
+  // Interactivité pour la sélection des données climatiques
   const dataSelection = document.getElementById('data-selection');
   const legendDiv = document.getElementById('legend');
 
@@ -52,15 +73,15 @@ document.addEventListener('DOMContentLoaded', function() {
     const selectedValue = dataSelection.value;
     legendDiv.innerHTML = '';
 
-    if (selectedValue === 'precipitation') { //si sélection de précipitation cette légende apparaît, sinon cf.2ème partie
+    if (selectedValue === 'precipitation') {
       legendDiv.innerHTML = `
-        <h3>Scénarios des précipitations jusqu'en 2050 </h3>
+        <h3>Scénarios des précipitations jusqu'en 2050</h3>
         <p>Texte pour précipitation.</p>
         <img src="path/to/precipitation-image.jpg" alt="Légende de précipitation" style="width:100%;">
       `;
-    } else if (selectedValue === 'temperature') { //sinon légende de température
+    } else if (selectedValue === 'temperature') {
       legendDiv.innerHTML = `
-        <h3>Scénarios des températures jusqu'en 2050 </h3>
+        <h3>Scénarios des températures jusqu'en 2050</h3>
         <p>Texte pour température</p>
         <img src="path/to/temperature-image.jpg" alt="Légende de température" style="width:100%;">
       `;
@@ -68,6 +89,5 @@ document.addEventListener('DOMContentLoaded', function() {
   }
 
   dataSelection.addEventListener('change', updateLegend);
-  updateLegend();
+  updateLegend(); // Mettre à jour la légende lors du chargement de la page
 });
-

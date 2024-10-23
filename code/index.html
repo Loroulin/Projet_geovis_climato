@@ -1,7 +1,8 @@
 <!DOCTYPE html>`
 <html>
   <head>
-    <meta charset="utf8" />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Projet Géovisualisation 2</title>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
     <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
@@ -49,7 +50,7 @@
             <div id="scenario">
               <label for="scenario-selection">Scénario :</label>
               <select id="scenario-selection">
-                <option value="8.5">RCP 2.6 </option>
+                <option value="2.6">RCP 2.6 </option>
                 <option value="4.5">RCP 4.5</option>
                 <option value="8.5">RCP 8.5</option>
               </select>
@@ -98,7 +99,12 @@
             </div>
           </div>
         </div>
-        <div class = "main" id="map"></div>
+          <div class = "main" id="map">
+             <div id="opacity-control">
+                <label for="opacityRange">Opacité du fond de carte :</label>
+                <input type="range" id="opacityRange" min="0" max="100" value="100">
+              </div>
+          </div>
         <div class = "right" id="legend"></div>
     </div>
     <div class="footer">Sources à définir</div>
