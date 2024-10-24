@@ -139,7 +139,7 @@ Pour commencer, un document HTML est composé de plusieurs éléments. Dans notr
 
 Chaque élément fonctionne comme un tiroir qui peut contenir d'autres éléments. Pour ajouter un élément, vous devez l'ouvrir en utilisant des chevrons autour de son nom, comme ceci : <...>. Pour fermer cet élément, vous ajoutez un / à l'intérieur des chevrons, comme ceci : </...>. Cette logique est utilisée pour chaque élément de l'HTML.
 
-![Elements de base d'un HTLM](structure_html_base.png)
+![Elements de base d'un HTLM](readme_pictures/structure_html_base.png)
 
 Par exemple : l'élément HTML principal s'ouvre avec  `<html>` et se ferme avec `</html>`. À l'intérieur de la balise html, vous pouvez avoir un `<head>` pour les métadonnées et un `<body>` pour le contenu visible de la page, chacun ayant sa propre balise d'ouverture et de fermeture.
 
