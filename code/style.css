@@ -29,6 +29,14 @@ h3 {
     margin: 0 10px 5px 10px;
 }
 
+
+p {
+    font-size: 10px;
+    color: #3B4E44;
+    margin: 0 10px 5px 10px;
+}
+
+
 .container {
     display: flex;
     margin-top: 10px;
@@ -53,6 +61,20 @@ h3 {
 .comparison h2 {
     margin-top: 20px;
     margin-bottom: 20px;
+}
+
+#map {
+    position: relative; /* Assure que le conteneur de la carte est en position relative */
+    height: 100%;
+}
+
+.image-overlay {
+    position: absolute; /* Positionne l'image de manière absolue */
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 2000; /* Met le z-index de l'image plus haut */
+    pointer-events: none; /* Allow map interaction */
 }
 
 
@@ -91,7 +113,7 @@ h3 {
     position: absolute; /* Changez à 'absolute' pour le positionner par rapport à son conteneur parent */
     bottom: 20px; /* Positionne le conteneur à 20px du bas */
     right: 10px; /* Positionne le conteneur à 10px de la droite */
-    z-index: 1000; /* S'assure qu'il est au-dessus de tout autre contenu */
+    z-index: 500; /* S'assure qu'il est au-dessus de tout autre contenu */
 }
 
 .zoom-in-button,

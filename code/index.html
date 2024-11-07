@@ -1,4 +1,4 @@
-<!DOCTYPE html>`
+<!DOCTYPE html>
 <html>
   <head>
     <meta charset="UTF-8" />
@@ -6,9 +6,13 @@
     <title>Projet Géovisualisation 2</title>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
     <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
-    <script src="index.js"></script>
+    <!--<script src="https://cdnjs.cloudflare.com/ajax/libs/proj4js/2.7.5/proj4.js"></script> -->
+    <script src="https://unpkg.com/leaflet-proj@latest/dist/leaflet-proj.js"></script>
     <link rel="stylesheet" href="style.css" />
+    <script src="index.js"></script>
   </head>
+
+
   <body>
     <h1>Evolution des facteurs climatiques </h1>
     <h2>Etat actuel et projeté des précipitations et des températures suisses</h2>
@@ -99,14 +103,14 @@
             </div>
           </div>
         </div>
-          <div class = "main" id="map">
-             <div id="opacity-control">
-                <label for="opacityRange">Opacité du fond de carte :</label>
-                <input type="range" id="opacityRange" min="0" max="100" value="100">
-              </div>
-          </div>
-        <div class = "right" id="legend"></div>
+    <div class="main" id="map">
+      <!-- <img src="../cartes/suisse.png" class="image-overlay" alt="Carte exportée de QGIS" /> -->
+      <div id="opacity-control">
+        <label for="opacityRange">Opacité de l'image :</label>
+        <input type="range" id="opacityRange" min="0" max="100" value="50">
+      </div>
     </div>
+    <div class = "right" id="legend"></div>
     <div class="footer">Sources à définir</div>
   </body>
 </html>
