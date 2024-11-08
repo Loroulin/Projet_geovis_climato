@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!DOCTYPE html>`
 <html>
   <head>
     <meta charset="UTF-8" />
@@ -6,13 +6,9 @@
     <title>Projet Géovisualisation 2</title>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
     <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
-    <!--<script src="https://cdnjs.cloudflare.com/ajax/libs/proj4js/2.7.5/proj4.js"></script> -->
-    <script src="https://unpkg.com/leaflet-proj@latest/dist/leaflet-proj.js"></script>
-    <link rel="stylesheet" href="style.css" />
     <script src="index.js"></script>
+    <link rel="stylesheet" href="style.css" />
   </head>
-
-
   <body>
     <h1>Evolution des facteurs climatiques </h1>
     <h2>Etat actuel et projeté des précipitations et des températures suisses</h2>
@@ -37,26 +33,26 @@
             <div id="month">
               <label for="month-selection">Mois :</label>
               <select id="month-selection">
-                <option value="Januar">Janvier </option>
-                <option value="Februar">Février</option>
-                <option value="March">Mars</option>
-                <option value="April">Avril</option>
-                <option value="May">Mai</option>
-                <option value="June">Juin</option>
-                <option value="July">Juillet</option>
-                <option value="August">Août</option>
-                <option value="September">Septembre</option>
-                <option value="October">Octobre</option>
-                <option value="November">Novembre</option>
-                <option value="December">Décembre</option>
+                <option value="01">Janvier </option>
+                <option value="02">Février</option>
+                <option value="03">Mars</option>
+                <option value="04">Avril</option>
+                <option value="05">Mai</option>
+                <option value="06">Juin</option>
+                <option value="07">Juillet</option>
+                <option value="08">Août</option>
+                <option value="09">Septembre</option>
+                <option value="10">Octobre</option>
+                <option value="11">Novembre</option>
+                <option value="12">Décembre</option>
               </select>
             </div>
             <div id="scenario">
               <label for="scenario-selection">Scénario :</label>
               <select id="scenario-selection">
-                <option value="2.6">RCP 2.6 </option>
-                <option value="4.5">RCP 4.5</option>
-                <option value="8.5">RCP 8.5</option>
+                <option value="rcp26">RCP 2.6 </option>
+                <option value="rcp45">RCP 4.5</option>
+                <option value="rcp85">RCP 8.5</option>
               </select>
             </div>
           </div>
@@ -79,38 +75,38 @@
             <div id="comparison-month">
               <label for="comparison-month-selection">Mois :</label>
               <select id="comparison-month-selection">
-                <option value="comparison-Januar">Janvier </option>
-                <option value="comparison-Februar">Février</option>
-                <option value="comparison-March">Mars</option>
-                <option value="comparison-April">Avril</option>
-                <option value="comparison-May">Mai</option>
-                <option value="comparison-June">Juin</option>
-                <option value="comparison-July">Juillet</option>
-                <option value="comparison-August">Août</option>
-                <option value="comparison-September">Septembre</option>
-                <option value="comparison-October">Octobre</option>
-                <option value="comparison-November">Novembre</option>
-                <option value="comparison-December">Décembre</option>
+                <option value="comp01">Janvier </option>
+                <option value="comp02">Février</option>
+                <option value="comp03">Mars</option>
+                <option value="comp04">Avril</option>
+                <option value="comp05">Mai</option>
+                <option value="comp06">Juin</option>
+                <option value="comp07">Juillet</option>
+                <option value="comp08">Août</option>
+                <option value="comp09">Septembre</option>
+                <option value="comp10">Octobre</option>
+                <option value="comp11">Novembre</option>
+                <option value="comp12">Décembre</option>
               </select>
             </div>
             <div id="comparison-scenario">
               <label for="comparison-scenario-selection">Scénario :</label>
               <select id="comparison-scenario-selection">
-                <option value="comparison-8.5">RCP 2.6 </option>
-                <option value="comparison-4.5">RCP 4.5</option>
-                <option value="comparison-8.5">RCP 8.5</option>
+                <option value="comprcp85">RCP 2.6 </option>
+                <option value="comprcp45">RCP 4.5</option>
+                <option value="comprcp85">RCP 8.5</option>
               </select>
             </div>
           </div>
         </div>
-    <div class="main" id="map">
-      <!-- <img src="../cartes/suisse.png" class="image-overlay" alt="Carte exportée de QGIS" /> -->
-      <div id="opacity-control">
-        <label for="opacityRange">Opacité de l'image :</label>
-        <input type="range" id="opacityRange" min="0" max="100" value="50">
-      </div>
+          <div class = "main" id="map">
+             <div id="opacity-control">
+                <label for="opacityRange">Opacité du fond de carte :</label>
+                <input type="range" id="opacityRange" min="0" max="100" value="100">
+              </div>
+          </div>
+        <div class = "right" id="legend"></div>
     </div>
-    <div class = "right" id="legend"></div>
     <div class="footer">Sources à définir</div>
   </body>
 </html>

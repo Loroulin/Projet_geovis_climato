@@ -3,11 +3,14 @@ Lorena Roulin et Marine Fiora
 Université de Lausanne, Mars 2024
 
 # Introduction
-Nous prévoyons de réaliser une carte interactive qui présente l'évolution des précipitations et des températures en Suisse, selon les différents scénarios du GIEC.
+Dans ce travail, nous prévoyons de réaliser une carte interactive qui présente l'évolution des précipitations et des températures en Suisse, selon la période actuelle et les différents scénarios du GIEC.
 
 L'objectif est de montrer les projections mensuelles ou annuelles à l'horizon 2050, en utilisant la période de référence de 1981-2010. Nous voulons construire une carte dans laquelle nous pourrons sélectionner différentes informations telles que des données de précipitaion et de température, l'année de référence, le mois auquel nous voulons voir les données ainsi que des projections futures. Ainsi, il sera possible de visionner les valeurs climatiques dans le passé mais aussi dans le future grâce à des projections climatiques. Les différentes sélections permettrons de choisir l'une des différentes cartes climatiques et de l'afficher. De plus, les différentes informations relatives aux cartes apparaîtrons aussi, sur le côté de l'image. 
 
-Avec cette idée de base en tête, nous allons crée une carte interactive sur internet. Pour se faire, le language HTML sera utilisé. Celui-ci est pratique et peut fonctionner en conjonction avec le langage CSS (style) et le Javascript (JS, pour l'interactivité). Ces différents éléments seront décrits plus tard. 
+Avec cette idée de base en tête, nous allons créer une carte interactive sur Internet. Pour se faire, le language HTML sera utilisé. Celui-ci est pratique et peut fonctionner en conjonction avec le langage CSS (style) et le Javascript (JS, pour l'interactivité). Ces différents éléments et les différentes étapes de la réalisation de la carte seront décrits dans la suite de ce document. 
+
+# Source d'inspiration pour le projet 
+Pour concevoir ce travail, nous nous sommes inspirées des cartes de températures et de précipitations réalisées dans l'Atlas hydrologique de la Suisse. Ces cartes interactives présentent l'évolution des températures et des précipitations selon les scénarios CH2018.
 
 ## Exemple de carte des précipitations 
 ![Carte des précipitations futures](precipitations.png)
@@ -15,39 +18,34 @@ Avec cette idée de base en tête, nous allons crée une carte interactive sur i
 ## Exemple de carte des températures 
 ![Carte des températures futures](temperatures.png)
 
-### Projection des précipitations dans le futur 
-Données sur les précipitations sur le site de la [Confédération suisse](https://www.bafu.admin.ch/). 
+# Données utilisées 
+Il n’a pas été facile de trouver des données correspondant aux besoins de notre travail. Nous avons donc exploré différentes sources avant de trouver celles finalement utilisées ici.
 
-### Projection des températures dans le futur 
-Données sur les températures : encore à trouver
+Afin de réaliser les différentes cartes pour notre carte interactive nous avons pris les données suivantes : https://zenodo.org/communities/chclim25/about
 
-# Cours du 10.04.2024
-A ce stade, nous avons trouvé plusieurs données climatiques. En premier, nous avons des données climatiques concernant directements les différentes stations météorologiques en Suisse. Nous avons trouvé [ces données](https://www.meteosuisse.admin.ch/services-et-publications/applications/ext/climate-tables-homogenized.html) grâce à l'aide du Professeur Fallot, qui nous les a indiquées. Cependant, nous ne pensons pas que ce soient les meilleures données à disposition, car elles ne montrent pas l'évolution future des températures.
+Ces données font partie de CHclim25, un ensemble de données climatiques pour la Suisse avec une résolution de 25 m x 25 m. Elles incluent des couches mensuelles et annuelles pour la température et les précipitations, ainsi que d'autres variables climatiques (non utilisées dans ce travail).
 
-Nous avons ensuite trouvé certaines données climatiques sur le [site de la confédération](https://www.bafu.admin.ch/bafu/fr/home/etat/donnees/geodonnees/forets--geodonnees.html). Celles-ci présentent des projections des températures maximales journalières de l'air en juillet, selon les RCP 2.6, 4.5 et 8.5. Nous considérons que ces données seront bien plus précieuses. De plus, nous avons également des données concernant les précipitations cumulées entre avril et août, de nouveau en fonction des mêmes RCP. Cela est intéressant, car il nous sera possible de calculer à l'échelle annuelle si c'est la direction que nous voulons suivre. Nous ne savons pas encore si ces données sont suffisamment précises. Ces informations sont majoritairement au format DB (GDBTABLE), qui peut être ouvert avec des logiciels comme ArcGIS.
+L’ensemble de données est dérivé d'un jeu de données à grille quotidienne avec une résolution de 1 km fourni par l'Office fédéral de météorologie et de climatologie (MeteoSwiss). Cette base a été affinée par une méthode de réduction d’échelle, appliquant des régressions locales avec un modèle d'élévation de 25 m de résolution pour mieux intégrer la topographie locale et les phénomènes climatiques complexes associés.
 
-Nous avons aussi vu qu'il était possible de commander des données sur Idaweb. Mais nous devons en discuter encore ensemble. 
+Les couches climatiques sont disponibles au format geoTIFF pour la période de référence 1981-2010 ainsi que pour trois périodes futures (2020-2049, 2045-2074 et 2070-2099). Elles tiennent compte de trois modèles de circulation (GCM-RCM) et de trois scénarios de concentration représentatifs (RCP) issus de l’initiative CH2018.
 
-# Rendez-vous du 13.04.2024
-Nous nous sommes rendu compte que nous n'avions pas les données nécessaires pour les températures, car les données minimales ne sont pas disponibles, ni les données annuelles. Nous avons donc décidé de commander des données sur l'Idaweb. Nous avons besoin de la signature du professeur responsable pour accéder à ces données.
+## Données des précipitations 
+Lien des données des précipitations moyennes : https://zenodo.org/records/7868383
 
-Sur la carte, nous pensions afficher la carte de la Suisse avec, sur le côté, les onglets correspondant aux RCP. Nous pouvons également ajouter une barre verticale que l'on peut déplacer de droite à gauche pour comparer plusieurs scénarios sélectionnés.
+Les données de précipitations proviennent de la grille quotidienne de 1 km de MétéoSuisse, réduite à une résolution de 25 m par interpolation bilinéaire. Les couches mensuelles et annuelles moyennes pour la période actuelle (1981-2010) et les périodes futures (2020-2049, 2045-2074, et 2070-2099) sont disponibles. 
 
-Nous avons aussi l'idée de pouvoir zoomer sur les différentes régions. Cependant, nous ne savons pas encore exactement comment cela sera réalisé, car cela dépend des données disponibles. Nous nous demandons également si nous devons sélectionner tous les cantons ou si nous devrions nous concentrer sur l'ouest de la Suisse (Suisse romande) pour obtenir des données potentiellement plus précises.
+## Données des températures  
+Lien des données des températures moyennes : https://zenodo.org/records/7859252
 
-A voir comment sera faite la map: js, d3?
+Les températures moyennes de l'air à 2 m sont issues d'un ensemble de données quotidien à 1 km de résolution de MétéoSuisse, ajusté à 25 m via une régression locale avec un modèle d'altitude. Les couches mensuelles et annuelles pour la période actuelle (1981-2010) et pour les futures moyennes (2020-2049, 2045-2074 et 2070-2099) sont disponibles. 
 
-# Cours du 17.04.2024
+# Visuel la carte
+Tout d'abord, nous avons pris le temps de faire un croquis pour visualiser la carte souhaitée pour ce projet, ce qui nous a aidés à mieux nous projeter et à estimer le travail nécessaire pour la créer. Cela nous a également permis de déterminer par où commencer pour réaliser la carte. Par la réalisation de ce croquis, nuus avons également réalisé que nous avions vu un peu grand pour commencer, et que certaines choses prévues initialement n'ont pas pu être réalisées par manque de temps.
 
-Nous avons fait signer le document par M. Kaiser, que nous allons envoyer à MétéoSuisse.
-
-# Rendez-vous du 27.04.2024
-Lorena a reçu les données de l'IDAweb, mais nous ne savons pas encore exactement comment les utiliser. Marine a également trouvé des données raster concernant les précipitations ainsi que les températures en fonction des différents scénarios. Ces données peuvent être ouvertes dans QGIS, mais nous ne savons pas comment les lire. Nous devons en discuter avec M. Kaiser pour savoir exactement comment utiliser ces données et si elles sont exploitables.
-
-Pour ne pas perdre trop de temps, nous avons réfléchi à la forme que nous souhaitons donner à notre projet. Il sera sûrement présenté sous cette forme :
+La carte interactive finale sera probablement présentée sous cette forme :
 ![Prémisses de la carte ](carte_idee_geovisu2.jpg)
 
-## Décortiquons la carte
+## Eléments de la carte
 Sur la gauche de la carte, nous retrouverons les informations fixes ; au centre se trouvera la carte et, à droite, les informations qui varient en fonction des sélections faites dans le menu de gauche.
 
 À gauche, nous trouverons plusieurs menus déroulants. Nous avons choisi d'opter pour des menus déroulants, notamment par souci de lisibilité. De cette manière, l'utilisateur pourra sélectionner plusieurs options, et seulement celles-ci apparaîtront. Il y a globalement trois choix pour l'utilisateur.
@@ -56,25 +54,22 @@ Sur la gauche de la carte, nous retrouverons les informations fixes ; au centre 
 2. L'année : de référence 1981-2010 ou projections pour les années 2020-2049. 
 3. Le scénario du GIEC : RCP2.6, RCP4.5, RCP8.5. 
 
-Si l'utilisateur ne souhaite pas faire de projections futures, il peut choisir de ne sélectionner que le thème de la carte, qui s'affichera avec la période de référence actuelle, soit 1981-2010. S'il désire des informations plus précises, il peut sélectionner les options 2 et 3.
+Si l'utilisateur ne souhaite pas faire de projections futures, il peut sélectionner uniquement le thème de la carte, qui s'affichera alors avec la période de référence actuelle, soit 1981-2010. Pour obtenir des informations plus précises, il peut choisir d'activer les options 2 et 3.
 
-De plus, sous ces choix se trouve l'option "Comparer", qui permet de faire un second ensemble de choix. C'est une section identique à celle des choix précédents. Ainsi, deux ensembles de choix pourront apparaître sur la carte, ce qui permet une meilleure comparaison. Cette comparaison peut être effectuée directement sur la carte, en utilisant une barre verticale qui sert de curseur. En déplaçant le curseur, les données d'un choix ou d'un autre apparaissent sur la carte.
+De plus, une option "Comparer" se trouve sous ces choix, permettant de créer un second ensemble de paramètres identique au premier. Ainsi, deux ensembles de choix pourront apparaître sur la carte pour faciliter la comparaison, directement visible grâce à une barre de défilement verticale qui sert de curseur. En déplaçant le curseur, les données de l'un ou l'autre choix sont affichées.
 
-La carte, située au centre, occupera la majorité de l'écran. On y trouvera la Suisse avec un choix de plusieurs fonds de carte (tels que MNT, relief, etc.). Une fonction de zoom permettra de voir plus précisément une région. Nous devrons limiter le zoom en fonction de la résolution des pixels des données à disposition. Toutes les informations nécessaires aux cartes (flèche du nord, échelle, source, auteurs, etc.) seront également présentes.
+La carte centrale occupera la majeure partie de l'écran, avec une vue de la Suisse et plusieurs options de fond de carte (MNT, relief, etc.). Une fonction de zoom permettra d'afficher des détails précis, bien que nous devrons en limiter l'ampleur selon la résolution des pixels disponibles. Les éléments essentiels, tels que la flèche du nord, l'échelle, les sources et les auteurs, seront également présents.
 
-Sur la droite se trouvent les informations variables. Au sommet de cette partie, le thème sélectionné sera repris et fera office de titre. Sous celui-ci se trouvera un texte explicatif qui apparaîtra selon les sélections faites à gauche. Cela aidera à la compréhension et à la lecture de la carte. Nous trouverons également dans cet espace les différentes légendes.
+Sur la droite, les informations contextuelles et variables seront affichées. Le thème sélectionné servira de titre en haut de cette section, et un texte explicatif apparaîtra en fonction des choix effectués à gauche, facilitant la compréhension et l'interprétation de la carte. Les légendes nécessaires se trouveront aussi dans cet espace.
 
 ## Pourquoi ces choix ?
-Nous souhaitons que la carte soit la plus claire possible, avec une partie "choix," une partie "carte" et une partie "informations." Nous avons choisi la logique du F, avec les informations les plus importantes sur la gauche, là où le regard se pose en premier. C'est également la partie la plus essentielle de la carte, car elle permet de sélectionner ce que l'on veut voir. Cette section n'est cependant pas excessivement large, afin de laisser le plus de place possible pour la visualisation des données.
+Nous souhaitons que la carte soit la plus claire possible, avec trois sections : "choix," "carte" et "informations." Nous avons opté pour une mise en page en forme de F, plaçant les informations les plus importantes à gauche, là où le regard se pose en premier. Cette section est essentielle, car elle permet de sélectionner les éléments à afficher, tout en restant suffisamment étroite pour maximiser l'espace dédié à la visualisation des données.
 
-Le choix du menu déroulant est vraiment une question de lisibilité. Nous voulons que cette partie soit la plus claire et compréhensible possible. En effet, less is more. Nous avons également décidé d'inclure la section "choix de comparaison" dans cette partie afin de garantir une lisibilité optimale. Le fait de mettre côte à côte les deux choix permet aussi une meilleure comparaison.
+Le choix du menu déroulant est une question de lisibilité. Nous voulons que cette partie soit aussi claire et compréhensible que possible, car moins c’est souvent mieux. Nous avons également intégré la section "choix de comparaison" dans cette partie pour garantir une lisibilité optimale. En présentant les deux choix côte à côte, nous favorisons une meilleure comparaison.
 
-La carte est située au centre, ce qui permet de diviser les informations textuelles et d'aérer l'ensemble. L'objectif est évidemment de rendre cette carte la plus grande possible.
+La carte est placée au centre, ce qui permet de séparer les informations textuelles et d’aérer l’ensemble. L’objectif est de rendre la carte aussi grande que possible.
 
-La partie droite comprend des informations relatives à ces choix ainsi que les légendes qui leur sont liées. Elle suit également la logique de gauche à droite : choix → visualisation → explications. 
-
-## Données
-Nous avons envoyé un e-mail à MétéoSuisse afin de comprendre comment lire les différentes données. Nous avons également choisi de nous restreindre, dans un premier temps, à la température et aux précipitations. De plus, nous souhaitons modifier le nombre d'onglets de possibilités concernant les choix de probabilité.
+La partie droite comprend des informations relatives aux choix ainsi que les légendes associées. Elle suit la logique de gauche à droite : choix → visualisation → explications.
 
 
 # Marche à suivre pour la réalisation de la carte interactive
