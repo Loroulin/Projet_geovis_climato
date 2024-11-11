@@ -138,6 +138,16 @@ p {
     left: 10px;
 }
 
+.opacity-control{
+    background-color: rgba(255, 255, 255, 0.9);
+    padding:5px;
+    border-radius:5px;
+    font-size: 12px;
+    position: absolute;
+    top:20px;
+    left:10px;
+}
+
 .footer {
     background-color: #d4c9c9;
     height: 25px;
