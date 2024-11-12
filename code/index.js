@@ -82,7 +82,7 @@ document.addEventListener('DOMContentLoaded', function () {
     opacitySlider.type = 'range';
     opacitySlider.min = 0;
     opacitySlider.max = 100;
-    opacitySlider.value = 100; // Valeur initiale (opacité 100%)
+    opacitySlider.value = 75; // Valeur initiale (opacité 100%)
 
     opacitySlider.addEventListener('input', function() {
       if (climateOverlay) {
