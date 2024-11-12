@@ -29,13 +29,11 @@ h3 {
     margin: 0 10px 5px 10px;
 }
 
-
 p {
     font-size: 10px;
     color: #3B4E44;
     margin: 0 10px 5px 10px;
 }
-
 
 .container {
     display: flex;
@@ -63,20 +61,45 @@ p {
     margin-bottom: 20px;
 }
 
-#map {
-    position: relative; /* Assure que le conteneur de la carte est en position relative */
+.main {
+    flex: 1 1 65%; /* Pour la carte principale */
+    background-color: transparent; /* Couleur de fond */
+    position: relative; /* Positionnement relatif pour les éléments enfants */
+    height: 100%;
+    width: 100%;
+}
+
+#map-container {
+    position: relative; /* Positionnement relatif pour contenir les éléments absolus */
+    width: 100%;
     height: 100%;
 }
 
-.image-overlay {
-    position: absolute; /* Positionne l'image de manière absolue */
+#map {
+    position: absolute;
     top: 0;
     left: 0;
     width: 100%;
-    z-index: 2000; /* Met le z-index de l'image plus haut */
-    pointer-events: none; /* Allow map interaction */
+    height: 100%;
+    z-index: 1; /* Assure que la carte est en arrière-plan */
 }
 
+.image-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 2; /* Assure que l'image est au-dessus de la carte */
+    pointer-events: none; /* Permet les interactions avec la carte */
+}
+
+#image-display {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Assure que l'image couvre toute la zone sans distorsion */
+    opacity: 0.5;
+}
 
 .left label {
     display: block;
@@ -96,12 +119,6 @@ p {
     width: 100px;
 }
 
-.main {
-    flex: 1 1 65%; /* Pour la carte principale */
-    background-color: transparent; /* Couleur de fond */
-    position: relative; /* Positionnement relatif pour les éléments enfants */
-}
-
 .right {
     flex: 2 1 20%; 
     background-color: #d4c9c9;
@@ -113,7 +130,7 @@ p {
     position: absolute; /* Changez à 'absolute' pour le positionner par rapport à son conteneur parent */
     bottom: 20px; /* Positionne le conteneur à 20px du bas */
     right: 10px; /* Positionne le conteneur à 10px de la droite */
-    z-index: 500; /* S'assure qu'il est au-dessus de tout autre contenu */
+    z-index: 999; /* S'assure qu'il est au-dessus de tout autre contenu */
 }
 
 .zoom-in-button,
@@ -136,16 +153,17 @@ p {
     position: absolute;
     bottom: 20px;
     left: 10px;
+    z-index: 500;
 }
 
-.opacity-control{
+.opacity-control {
     background-color: rgba(255, 255, 255, 0.9);
-    padding:5px;
-    border-radius:5px;
+    padding: 5px;
+    border-radius: 5px;
     font-size: 12px;
     position: absolute;
-    top:20px;
-    left:10px;
+    top: 20px;
+    left: 10px;
 }
 
 .footer {

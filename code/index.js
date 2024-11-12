@@ -82,7 +82,7 @@ document.addEventListener('DOMContentLoaded', function () {
     opacitySlider.type = 'range';
     opacitySlider.min = 0;
     opacitySlider.max = 100;
-    opacitySlider.value = 75; // Valeur initiale (opacité 100%)
+    opacitySlider.value = 50; // Valeur initiale (opacité 100%)
 
     opacitySlider.addEventListener('input', function() {
       if (climateOverlay) {
@@ -96,57 +96,73 @@ document.addEventListener('DOMContentLoaded', function () {
   opacityControl.addTo(map);
 
 
+  //Fonction pour générer la sélection d'année pour activer/désactiver le scenario
+  function gererSelectionAnnee(){
+    const anneeSelectionnee = document.getElementById("year-selection").value;
+    const scenarioMenu = document.getElementById("scenario-selection");
 
-  // Variables pour les sélections et l'image overlay
-  const dataSelection = document.getElementById('data-selection');
-  const yearSelection = document.getElementById('year-selection');
-  const monthSelection = document.getElementById('month-selection');
-  const scenarioSelection = document.getElementById('scenario-selection');
+    if (anneeSelectionnee == "20-49"){
+      scenarioMenu.disabled = false;
+    } else{
+      scenarioMenu.disabled = true;
+      scenarioMenu.value = "";
+    }
 
-  // Fonction pour vérifier la validité de la sélection
-  function isValidSelection() {
-    const factor = dataSelection.value;
-    const year = yearSelection.value;
-    const month = monthSelection.value;
-    const scenario = scenarioSelection.value;
-    // Vérification des champs requis
-    return factor && year && month && (year === '91-10' || scenario);
+    afficherSelectionOrigin();
   }
 
+    // Fonction qui actualise l'image en fonction des sélections
+  function afficherSelectionOrigin() {
+    const facteurClimatique = document.getElementById("data-selection").value;
+    const annee = document.getElementById("year-selection").value;
+    const mois = document.getElementById("month-selection").value;
+    const scenario = document.getElementById("scenario-selection").value;
 
-  // Fonction pour générer et afficher l'image selon la sélection
-  function generateImage() {
-    if (climateOverlay) {
-      map.removeLayer(climateOverlay);
-    }
-    if (!isValidSelection()) {
-      return; // Quitter si la sélection n'est pas valide
-    }
+    console.log("Facteur climatique :", facteurClimatique);
+    console.log("Année :", annee);
+    console.log("Mois :", mois);
+    console.log("Scénario :", scenario); 
 
-    const factor = dataSelection.value;
-    const year = yearSelection.value;
-    const month = monthSelection.value;
-    const scenario = scenarioSelection.value;
-
-    let imageName;
-    if (year === '91-10') {
-      imageName = `${factor}_${year}_${month}.png`;
-    } else {
-      imageName = `${factor}_${year}_${month}_${scenario}.png`;
+    // Créer le nom du fichier de l'image en fonction des sélections
+    let imageNom;
+    if (annee === "91-10") {
+      imageNom = `${facteurClimatique}_${annee}_${mois}.png`;  // Utilise des backticks (`) pour le template literal
+    } else if (annee === "20-49") {
+      imageNom = `${facteurClimatique}_${annee}_${mois}_${scenario}.png`;  // Utilise des backticks (`) pour le template literal
     }
 
-    const imagePath = `../cartes/${imageName}`;
-    climateOverlay = L.imageOverlay(imagePath, map.getBounds(), { opacity: 1 });
-    climateOverlay.addTo(map);
+    // Créer le chemin de l'image
+    const cheminImage = `../cartes/${imageNom}`;
+
+    // Vérifier que l'image existe
+    const img = new Image();
+    img.src = cheminImage;
+    img.onload = function() {
+      const bounds = [[45.5, 5.0], [48.0, 11.5]]; // Définir les limites de l'image (frontières de la Suisse)
+
+      // Si une image de superposition existe déjà, la retirer avant de rajouter la nouvelle
+      if (climateOverlay) {
+        climateOverlay.remove();
+      }
+
+      // Ajouter la nouvelle image comme superposition sur la carte
+      climateOverlay = L.imageOverlay(cheminImage, bounds);
+      climateOverlay.addTo(map); // Ajouter l'overlay de l'image à la carte
+    }
+
+    img.onerror = function() {
+      // Si l'image ne se charge pas, on la supprime (au cas où une image invalide serait affichée)
+      if (climateOverlay) {
+        climateOverlay.remove();
+      }
+    };
   }
 
-  // Événements de changement pour les menus déroulants
-  dataSelection.addEventListener('change', generateImage);
-  yearSelection.addEventListener('change', generateImage);
-  monthSelection.addEventListener('change', generateImage);
-  scenarioSelection.addEventListener('change', generateImage);
-
-
+  // Mettre à jour l'image chaque fois qu'un paramètre change
+document.getElementById("data-selection").addEventListener("change", afficherSelectionOrigin); // Appelle `afficherSelectionOrigin` pour le facteur climatique
+document.getElementById("year-selection").addEventListener("change", gererSelectionAnnee);  // Appelle `gererSelectionAnnee` pour l'année
+document.getElementById("month-selection").addEventListener("change", afficherSelectionOrigin); // Appelle `afficherSelectionOrigin` pour le mois
+document.getElementById("scenario-selection").addEventListener("change", afficherSelectionOrigin); // Appelle `afficherSelectionOrigin` pour le scénario
 
 
   // Interactivité pour la légende
