@@ -133,12 +133,13 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Créer le chemin de l'image
     const cheminImage = `../cartes/${imageNom}`;
-
+    //const cheminImage = '../cartes2/carte_essai.png';
     // Vérifier que l'image existe
     const img = new Image();
     img.src = cheminImage;
     img.onload = function() {
-      const bounds = [[45.5, 5.0], [48.0, 11.5]]; // Définir les limites de l'image (frontières de la Suisse)
+      const bounds = [[45.739229409, 5.835645203], [47.85049233, 10.643212989]]
+     // const bounds = [[45.5, 5.0], [48.0, 11.5]]; // Définir les limites de l'image (frontières de la Suisse)
 
       // Si une image de superposition existe déjà, la retirer avant de rajouter la nouvelle
       if (climateOverlay) {
