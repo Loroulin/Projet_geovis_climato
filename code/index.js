@@ -1,7 +1,3 @@
-/////valeurs par défaut////
-let currentOpacity = 1;  // Valeur par défaut de l'opacité
-let climateOverlay= null; //initialisation globale
-
 ///////////////////////////////////////////////////////////////////////////////////////
 //CREATION DE LA CARTE 
 //////////////////////////////////////////////////////////////////////////////////////
@@ -108,68 +104,8 @@ document.addEventListener('DOMContentLoaded', function () {
   scenarioSelection.value = ""; // Désactiver la valeur par défaut du scénario
 
   ////////////////////////////////////////////////////////////
-  //CREE LE SLIDE D'OPACITE
-  ////////////////////////////////////////////////////////////
-  //let climateOverlay; // reprend l'image ajouté par le menu
-
-  // Créer le contrôle d'opacité pour les images
-  const opacityControl = L.control({ position: 'topleft' });
-
-  opacityControl.onAdd = function () {
-    var container = L.DomUtil.create('div', 'opacity-control');
-    container.style.backgroundColor = 'rgba(255, 255, 255, 0.7)';
-    container.style.padding = '5px';
-    container.style.borderRadius = '5px';
-    container.style.fontSize = '12px';
-
-    var opacityLabel = L.DomUtil.create('label', '', container);
-    opacityLabel.innerHTML = 'Opacité:';
-
-    var opacitySlider = L.DomUtil.create('input', '', container);
-    opacitySlider.type = 'range';
-    opacitySlider.min = 0;
-    opacitySlider.max = 100;
-    opacitySlider.value = currentOpacity * 100; // Applique l'opacité actuelle du curseur (multipliée par 100)
-
-
-    // Désactiver les interactions de la carte lorsque l'utilisateur interagit avec le slider
-    opacitySlider.addEventListener('mousedown', function () {
-      map.dragging.disable();
-      map.doubleClickZoom.disable();
-      map.scrollWheelZoom.disable();
-    });
-
-    // Réactiver les interactions de la carte lorsque l'utilisateur relâche le slider
-    opacitySlider.addEventListener('mouseup', function () {
-      map.dragging.enable();
-      map.doubleClickZoom.enable();
-      map.scrollWheelZoom.enable();
-    });
-
-    //ajuste l'opacité en temps réel.
-   // Ajuste l'opacité en temps réel.
-    opacitySlider.addEventListener('input', function () {
-      currentOpacity = opacitySlider.value / 100; // Met à jour la variable currentOpacity
-      
-      // Si l'overlay climatique est présent, ajuster son opacité
-      if (climateOverlay) {
-        climateOverlay.setOpacity(currentOpacity); // Ajuste l'opacité de l'overlay climatique
-      }
-      
-      // Si l'overlay de comparaison est présent, ajuster son opacité
-      if (comparisonOverlay) {
-        comparisonOverlay.setOpacity(currentOpacity); // Ajuste l'opacité de l'overlay de comparaison
-      }
-    });
-    return container;
-  };
-
-  opacityControl.addTo(map);
-
-  ////////////////////////////////////////////////////////////
   //CREE LE BLOCKAGE DES SCENARIOS ORIGINAUX 20-49
   ////////////////////////////////////////////////////////////
-
   //Fonction pour générer la sélection d'année pour activer/désactiver le scenario
   function gererSelectionAnnee(){
     const anneeSelectionnee = document.getElementById("year-selection").value;
@@ -255,9 +191,150 @@ document.addEventListener('DOMContentLoaded', function () {
   toggleScenarioSelection();
 
   ////////////////////////////////////////////////////////////
+  // AFFICHER LES IMAGES D'ORIGINES
+  ////////////////////////////////////////////////////////////
+  // Fonction qui actualise l'image en fonction des sélections
+   function afficherSelectionOrigin() {
+    const facteurClimatique = document.getElementById("data-selection").value;
+    const annee = document.getElementById("year-selection").value;
+    const mois = document.getElementById("month-selection").value;
+    const scenario = document.getElementById("scenario-selection").value;
+
+    console.log("Facteur climatique :", facteurClimatique);
+    console.log("Année :", annee);
+    console.log("Mois :", mois);
+    console.log("Scénario :", scenario); 
+
+    // Afficher le message de chargement
+    document.getElementById('loading-message').style.display = 'block';
+
+    // Créer le nom du fichier de l'image en fonction des sélections
+    let imageNom;
+    if (annee === "91-10") {
+      imageNom = `${facteurClimatique}_${annee}_${mois}.png`;
+    } else if (annee === "20-49") {
+      imageNom = `${facteurClimatique}_${annee}_${mois}_${scenario}.png`;
+    }
+
+    // Créer le chemin de l'image
+    const cheminImage = `../cartes/${imageNom}`;
+
+    // Vérifier que l'image existe
+    const img = new Image();
+    img.src = cheminImage;
+    img.onload = function() {
+      const bounds = [[45.739229409, 5.835645203], [47.85049233, 10.643212989]];
+
+      // Si une image de superposition existe déjà, la retirer avant de rajouter la nouvelle
+      if (climateOverlay) {
+        climateOverlay.remove();
+      }
+
+      // Ajouter la nouvelle image comme superposition sur la carte
+      climateOverlay = L.imageOverlay(cheminImage, bounds);
+      climateOverlay.addTo(map); // Ajouter l'overlay de l'image à la carte
+
+      // Cacher le message de chargement une fois l'image chargée
+      document.getElementById('loading-message').style.display = 'none';
+    };
+
+    img.onerror = function() {
+      // Si l'image ne se charge pas, on la supprime (au cas où une image invalide serait affichée)
+      if (climateOverlay) {
+        climateOverlay.remove();
+      }
+
+      // Cacher le message de chargement si l'image échoue
+      document.getElementById('loading-message').style.display = 'none';
+    };
+  }
+
+
+  // Mettre à jour l'image chaque fois qu'un paramètre change
+  document.getElementById("data-selection").addEventListener("change", afficherSelectionOrigin); // Appelle `afficherSelectionOrigin` pour le facteur climatique
+  document.getElementById("year-selection").addEventListener("change", gererSelectionAnnee);  // Appelle `gererSelectionAnnee` pour l'année
+  document.getElementById("month-selection").addEventListener("change", afficherSelectionOrigin); // Appelle `afficherSelectionOrigin` pour le mois
+  document.getElementById("scenario-selection").addEventListener("change", afficherSelectionOrigin); // Appelle `afficherSelectionOrigin` pour le scénario
+
+
+  ////////////////////////////////////////////////////////////
+  // AJOUTER L'INTRACTIVITE DU MENU DEROULANT COMPARISON
+  //////////////////////////////////////////////////////////
+  //let comparisonOverlay = null; // Couche pour les images de comparaison
+
+  function afficherComparaison() {
+    // Logique pour afficher la comparaison des données
+    console.log("Affichage de la comparaison");
+
+    // Afficher le message de chargement
+    document.getElementById('loading-message').style.display = 'block';
+
+    let facteurComparaison = document.getElementById('comparison-data-selection').value;
+    const anneeComparaison = document.getElementById('comparison-year-selection').value;
+    const moisComparaison = document.getElementById('comparison-month-selection').value;
+    const scenarioComparaison = document.getElementById('comparison-scenario-selection').value;
+    let imageNomComparison = '';
+
+    // Si facteurComparaison commence par "comparison-", on l'enlève
+    if (facteurComparaison.startsWith('comparison-')) {
+        facteurComparaison = facteurComparaison.replace('comparison-', '');
+    }
+
+    // Logique conditionnelle pour définir le nom de l'image selon l'année
+    if (anneeComparaison === "91-10") {
+        imageNomComparison = `${facteurComparaison}_${anneeComparaison}_${moisComparaison}`;
+    } else if (anneeComparaison === "20-49") {
+        imageNomComparison = `${facteurComparaison}_${anneeComparaison}_${moisComparaison}_${scenarioComparaison}`;
+    } else {
+        imageNomComparison = `${facteurComparaison}_${anneeComparaison}_${moisComparaison}_${scenarioComparaison}`;
+    }
+
+    // Si l'extension .png n'est pas déjà présente, l'ajouter
+    if (!imageNomComparison.endsWith('.png')) {
+        imageNomComparison += '.png';
+    }
+
+    // URL ou source de l'image de comparaison
+    const urlComparaison = `../cartes/${imageNomComparison}`;
+    console.log('URL générée pour la comparaison :', urlComparaison); // Debugging
+
+    // Supprimer la couche de comparaison précédente si elle existe
+    if (comparisonOverlay) {
+        map.removeLayer(comparisonOverlay);
+    }
+
+    // Ajouter la nouvelle couche de comparaison
+    comparisonOverlay = L.imageOverlay(urlComparaison, [[45.739229409, 5.835645203], [47.85049233, 10.643212989]], {
+        opacity: currentOpacity,
+    }).addTo(map);
+
+    // Cacher le message de chargement une fois l'image de comparaison ajoutée
+    document.getElementById('loading-message').style.display = 'none';
+  }
+
+
+  document.getElementById('comparison-data-selection').addEventListener('change', afficherComparaison);
+  document.getElementById('comparison-year-selection').addEventListener('change', afficherComparaison);
+  document.getElementById('comparison-scenario-selection').addEventListener('change', afficherComparaison);
+
+  ////////////////////////////////////////////////////////////
+  // AJOUTER LE SLIDER
+  //////////////////////////////////////////////////////////
+  document.getElementById('comparison-checkbox').addEventListener('change', function() {
+    var sliderContainer = document.getElementById('slider-container');
+    if (this.checked) {
+      sliderContainer.style.display = 'block'; // Afficher le curseur
+    } else {
+      sliderContainer.style.display = 'none'; // Masquer le curseur
+    }
+  });
+
+
+  ////////////////////////////////////////////////////////////
   // AJOUTER L'INTERACTIVITÉ DE LA LÉGENDE
   ////////////////////////////////////////////////////////////
   // Sélectionner les éléments
+  /*
   const dataSelection = document.getElementById('data-selection');
   const comparisonSelection = document.getElementById('comparison-data-selection');
   const precipitationLegend = document.getElementById('precipitation-legend');
@@ -269,7 +346,6 @@ document.addEventListener('DOMContentLoaded', function () {
   let selectedValue = ''; // Valeur de la sélection principale (precipitation ou temperature)
   let selectedComparisonValue = ''; // Valeur de la sélection de comparaison (précipitation ou température)
   let lastUsedLegend = 'null'; // Stockera la dernière légende affichée : 'precipitation' ou 'temperature' --> pour ne pas avoir double légende dès le checkbox checked. 
-
 
   // Ajouter un écouteur d'événement pour capturer la sélection principale
   dataSelection.addEventListener('change', function() {
@@ -350,137 +426,83 @@ function updateLegend() {
     }
   }
   };
+  */
 
+    ////////////////////////////////////////////////////////////
+  // CREE LE SLIDE D'OPACITE
   ////////////////////////////////////////////////////////////
-  // AFFICHER LES IMAGES D'ORIGINES
-  ////////////////////////////////////////////////////////////
-  // Fonction qui actualise l'image en fonction des sélections
-  function afficherSelectionOrigin() {
-    const facteurClimatique = document.getElementById("data-selection").value;
-    const annee = document.getElementById("year-selection").value;
-    const mois = document.getElementById("month-selection").value;
-    const scenario = document.getElementById("scenario-selection").value;
+ 
+  // Initialisation de l'opacité
+  let currentOpacity = 1;
+  let climateOverlay; // Référence à l'overlay climatique
+  let comparisonOverlay; // Référence à l'overlay de comparaison
+ /*
+  // Créer le contrôle d'opacité pour les images
+  const opacityControl = L.control({ position: 'topleft' });
 
-    console.log("Facteur climatique :", facteurClimatique);
-    console.log("Année :", annee);
-    console.log("Mois :", mois);
-    console.log("Scénario :", scenario); 
+  opacityControl.onAdd = function () {
+    const container = L.DomUtil.create('div', 'opacity-control');
+    container.style.backgroundColor = 'rgba(255, 255, 255, 0.7)';
+    container.style.padding = '10px';
+    container.style.borderRadius = '5px';
+    container.style.fontSize = '12px';
+    container.style.boxShadow = '0 2px 6px rgba(0,0,0,0.2)';
 
-    // Créer le nom du fichier de l'image en fonction des sélections
-    let imageNom;
-    if (annee === "91-10") {
-      imageNom = `${facteurClimatique}_${annee}_${mois}.png`;  // Utilise des backticks (`) pour le template literal
-    } else if (annee === "20-49") {
-      imageNom = `${facteurClimatique}_${annee}_${mois}_${scenario}.png`;  // Utilise des backticks (`) pour le template literal
-    }
+    // Étiquette pour le slider
+    const opacityLabel = L.DomUtil.create('label', '', container);
+    opacityLabel.innerHTML = 'Opacité :';
+    opacityLabel.style.display = 'block';
+    opacityLabel.style.marginBottom = '5px';
 
-    // Créer le chemin de l'image
-    const cheminImage = `../cartes/${imageNom}`;
-    //const cheminImage = '../cartes2/carte_essai.png';
-    // Vérifier que l'image existe
-    const img = new Image();
-    img.src = cheminImage;
-    img.onload = function() {
-      const bounds = [[45.739229409, 5.835645203], [47.85049233, 10.643212989]]
-     // const bounds = [[45.5, 5.0], [48.0, 11.5]]; // Définir les limites de l'image (frontières de la Suisse)
+    // Slider d'opacité
+    const opacitySlider = L.DomUtil.create('input', '', container);
+    opacitySlider.type = 'range';
+    opacitySlider.min = 0;
+    opacitySlider.max = 100;
+    opacitySlider.value = currentOpacity * 100; // Applique l'opacité actuelle du curseur
+    opacitySlider.style.width = '100%';
 
-      // Si une image de superposition existe déjà, la retirer avant de rajouter la nouvelle
+    // Désactiver les interactions de la carte lorsque l'utilisateur interagit avec le slider
+    opacitySlider.addEventListener('mousedown', function () {
+      map.dragging.disable();
+      map.doubleClickZoom.disable();
+      map.scrollWheelZoom.disable();
+    });
+
+    // Réactiver les interactions de la carte lorsque l'utilisateur relâche le slider
+    opacitySlider.addEventListener('mouseup', function () {
+      map.dragging.enable();
+      map.doubleClickZoom.enable();
+      map.scrollWheelZoom.enable();
+    });
+
+    // Ajuste l'opacité en temps réel
+    opacitySlider.addEventListener('input', function () {
+      currentOpacity = opacitySlider.value / 100; // Met à jour la variable currentOpacity
+      
+      // Si l'overlay climatique est présent, ajuster son opacité
       if (climateOverlay) {
-        climateOverlay.remove();
+        climateOverlay.setOpacity(currentOpacity);
       }
 
-      // Ajouter la nouvelle image comme superposition sur la carte
-      climateOverlay = L.imageOverlay(cheminImage, bounds);
-      climateOverlay.addTo(map); // Ajouter l'overlay de l'image à la carte
-    }
-
-    img.onerror = function() {
-      // Si l'image ne se charge pas, on la supprime (au cas où une image invalide serait affichée)
-      if (climateOverlay) {
-        climateOverlay.remove();
-      }
-    };
-  }
-
-  // Mettre à jour l'image chaque fois qu'un paramètre change
-  document.getElementById("data-selection").addEventListener("change", afficherSelectionOrigin); // Appelle `afficherSelectionOrigin` pour le facteur climatique
-  document.getElementById("year-selection").addEventListener("change", gererSelectionAnnee);  // Appelle `gererSelectionAnnee` pour l'année
-  document.getElementById("month-selection").addEventListener("change", afficherSelectionOrigin); // Appelle `afficherSelectionOrigin` pour le mois
-  document.getElementById("scenario-selection").addEventListener("change", afficherSelectionOrigin); // Appelle `afficherSelectionOrigin` pour le scénario
-
-////////////////////////////////////////////////////////////
-// AJOUTER L'INTRACTIVITE DU MENU DEROULANT COMPARISON
-//////////////////////////////////////////////////////////
-  let comparisonOverlay = null; // Couche pour les images de comparaison
-
-  function afficherComparaison() {
-      // Logique pour afficher la comparaison des données
-      console.log("Affichage de la comparaison");
-      let facteurComparaison = document.getElementById('comparison-data-selection').value;
-      const anneeComparaison = document.getElementById('comparison-year-selection').value;
-      const moisComparaison = document.getElementById('comparison-month-selection').value;
-      const scenarioComparaison = document.getElementById('comparison-scenario-selection').value;
-      let imageNomComparison = '';  // Déclare une variable pour le nom de l'image
-
-      // Si facteurComparaison commence par "comparison-", on l'enlève
-      if (facteurComparaison.startsWith('comparison-')) {
-          facteurComparaison = facteurComparaison.replace('comparison-', '');
-      }
-
-      // Logique conditionnelle pour définir le nom de l'image selon l'année
-      if (anneeComparaison === "91-10") {
-          imageNomComparison = `${facteurComparaison}_${anneeComparaison}_${moisComparaison}`;  // Format sans scénario
-      } else if (anneeComparaison === "20-49") {
-          imageNomComparison = `${facteurComparaison}_${anneeComparaison}_${moisComparaison}_${scenarioComparaison}`;  // Ajoute le scénario pour 20-49
-      } else {
-          imageNomComparison = `${facteurComparaison}_${anneeComparaison}_${moisComparaison}_${scenarioComparaison}`;  // Autres cas, avec scénario
-      }
-
-      // Si l'extension .png n'est pas déjà présente, l'ajouter
-      if (!imageNomComparison.endsWith('.png')) {
-          imageNomComparison += '.png';
-      }
-
-      // URL ou source de l'image de comparaison
-      const urlComparaison = `../cartes/${imageNomComparison}`;
-      console.log('URL générée pour la comparaison :', urlComparaison); // Debugging
-
-      // Supprimer la couche de comparaison précédente si elle existe
+      // Si l'overlay de comparaison est présent, ajuster son opacité
       if (comparisonOverlay) {
-          map.removeLayer(comparisonOverlay);
+        comparisonOverlay.setOpacity(currentOpacity);
       }
+    });
 
-      // Ajouter la nouvelle couche de comparaison
-      comparisonOverlay = L.imageOverlay(urlComparaison, [[45.739229409, 5.835645203], [47.85049233, 10.643212989]], {
-          opacity: currentOpacity, // Opacité actuelle
-      }).addTo(map);
-  }
+    return container;
+  };
 
-  document.getElementById('comparison-data-selection').addEventListener('change', afficherComparaison);
-  document.getElementById('comparison-year-selection').addEventListener('change', afficherComparaison);
-  document.getElementById('comparison-scenario-selection').addEventListener('change', afficherComparaison);
+  // Ajouter le contrôle d'opacité à la carte
+  opacityControl.addTo(map);
 
-  ////////////////////////////////////////////////////////////
-  // AJOUTER LE SLIDER
-  //////////////////////////////////////////////////////////
-  // Sélectionner les éléments nécessaires
-  const slider = document.getElementById('slider-container');
-  const mapComparison = document.getElementById('map-comparison');
-  console.log('map comparaison:',mapComparison)
+  // Exemple d'ajout des couches pour tester
+  climateOverlay = L.imageOverlay('path/to/climate-image.png', [[51.49, -0.08], [51.5, -0.06]], { opacity: currentOpacity });
+  comparisonOverlay = L.imageOverlay('path/to/comparison-image.png', [[51.49, -0.08], [51.5, -0.06]], { opacity: currentOpacity });
 
-  // Fonction pour déplacer le curseur et ajuster la largeur de l'image de comparaison
-  slider.addEventListener('input', function () {
-    const sliderValue = slider.value;  // Récupérer la valeur du curseur
-    
-    // Déplacer le curseur horizontalement (de gauche à droite)
-    slider.style.left = `calc(${sliderValue}% - 2px)`; // Ajuste la position du curseur
-    
-    // Modifier la largeur de l'image de comparaison
-    mapComparison.style.clipPath = `inset(0 ${100 - sliderValue}% 0 0)`; // Ajuste la visibilité de l'image
-  });
-
-  // Réinitialiser la position du curseur au début (50% comme par défaut)
-  slider.value = 50;
-  slider.style.left = 'calc(50% - 2px)';
+  // Ajouter les couches à la carte
+  climateOverlay.addTo(map);
+  comparisonOverlay.addTo(map); */
 
 });//ceci est la fin de addeventlistener.

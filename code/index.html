@@ -1,155 +1,151 @@
 <!DOCTYPE html>
 <html lang="fr">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Projet Géovisualisation 2</title>
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
-    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
-    <link rel="stylesheet" href="style.css" />
-    <script src="https://unpkg.com/leaflet-side-by-side/leaflet-side-by-side.js"></script>
-    <script src="index.js" defer></script>
-  </head>
-  <body>
-    <!-- Header Section -->
-    <div id="header">
-      <div class="titre">
-        <h1>Evolution des facteurs climatiques</h1>
-        <h2>Etat actuel et projeté des précipitations et des températures en Suisse</h2>
-      </div>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Projet Géovisualisation 2</title>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+  <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+  <link rel="stylesheet" href="style.css" />
+  <script src="https://unpkg.com/leaflet-side-by-side/leaflet-side-by-side.js"></script>
+  <script src="index.js" defer></script>
+</head>
+<body>
+  <!-- Header Section -->
+  <header id="header">
+    <div class="titre">
+      <h1>Évolution des facteurs climatiques</h1>
+      <h2>État actuel et projeté des précipitations et des températures en Suisse</h2>
     </div>
+  </header>
 
-    <!-- Main Content Container -->
-    <div class="container">
-      <!-- Left Section with Info Form -->
-      <div class="left" id="info">
-        <div class="origin">
-          <h3>Visualiser :</h3>
-          <div id="climatic-factor">
-            <label for="data-selection">Facteur climatique :</label>
-            <select id="data-selection">
-              <option value="precipitation">Précipitation</option>
-              <option value="temperature">Température</option>
-            </select>
-          </div>
-          <div id="year">
-            <label for="year-selection">Année :</label>
-            <select id="year-selection">
-              <option value="91-10">1991 - 2010</option>
-              <option value="20-49">2020 - 2049</option>
-            </select>
-          </div>
-          <div id="month">
-            <label for="month-selection">Mois :</label>
-            <select id="month-selection">
-              <option value="01">Janvier</option>
-              <option value="02">Février</option>
-              <option value="03">Mars</option>
-              <option value="04">Avril</option>
-              <option value="05">Mai</option>
-              <option value="06">Juin</option>
-              <option value="07">Juillet</option>
-              <option value="08">Août</option>
-              <option value="09">Septembre</option>
-              <option value="10">Octobre</option>
-              <option value="11">Novembre</option>
-              <option value="12">Décembre</option>
-            </select>
-          </div>
-          <div id="scenario">
-            <label for="scenario-selection">Scénario :</label>
-            <select id="scenario-selection">
-              <option value="rcp26">RCP 2.6</option>
-              <option value="rcp45">RCP 4.5</option>
-              <option value="rcp85">RCP 8.5</option>
-            </select>
-          </div>
+  <!-- Main Content Container -->
+  <main class="container">
+    <!-- Left Section with Info Form -->
+    <aside class="left" id="info">
+      <section class="origin">
+        <h3>Visualiser :</h3>
+        <div id="climatic-factor">
+          <label for="data-selection">Facteur climatique :</label>
+          <select id="data-selection">
+            <option value="precipitation">Précipitation</option>
+            <option value="temperature">Température</option>
+          </select>
         </div>
+        <div id="year">
+          <label for="year-selection">Année :</label>
+          <select id="year-selection">
+            <option value="91-10">1991 - 2010</option>
+            <option value="20-49">2020 - 2049</option>
+          </select>
+        </div>
+        <div id="month">
+          <label for="month-selection">Mois :</label>
+          <select id="month-selection">
+            <option value="01">Janvier</option>
+            <option value="02">Février</option>
+            <option value="03">Mars</option>
+            <option value="04">Avril</option>
+            <option value="05">Mai</option>
+            <option value="06">Juin</option>
+            <option value="07">Juillet</option>
+            <option value="08">Août</option>
+            <option value="09">Septembre</option>
+            <option value="10">Octobre</option>
+            <option value="11">Novembre</option>
+            <option value="12">Décembre</option>
+          </select>
+        </div>
+        <div id="scenario">
+          <label for="scenario-selection">Scénario :</label>
+          <select id="scenario-selection">
+            <option value="rcp26">RCP 2.6</option>
+            <option value="rcp45">RCP 4.5</option>
+            <option value="rcp85">RCP 8.5</option>
+          </select>
+        </div>
+      </section>
 
-        <!-- Section Comparaison -->
-        <div class="comparison">
-          <div id="comparison_choice">
-            <label for="comparison-checkbox">
-              <input type="checkbox" id="comparison-checkbox"> Comparer ?
-            </label>
-          </div>
-          <div id="comparison-climatic-factor" style="display: none;">
-            <label for="comparison-data-selection">Facteur climatique :</label>
-            <select id="comparison-data-selection">
-              <option value="comparison-precipitation">Précipitation</option>
-              <option value="comparison-temperature">Température</option>
-            </select>
-          </div>
-          <div id="comparison-year" style="display: none;">
-            <label for="comparison-year-selection">Année :</label>
-            <select id="comparison-year-selection">
-              <option value="91-10">1991 - 2010</option>
-              <option value="20-49">2020 - 2049</option>
-            </select>
-          </div>
-          <div id="comparison-month" style="display: none;">
-            <label for="comparison-month-selection">Mois :</label>
-            <select id="comparison-month-selection">
-              <option value="01">Janvier</option>
-              <option value="02">Février</option>
-              <option value="03">Mars</option>
-              <option value="04">Avril</option>
-              <option value="05">Mai</option>
-              <option value="06">Juin</option>
-              <option value="07">Juillet</option>
-              <option value="08">Août</option>
-              <option value="09">Septembre</option>
-              <option value="10">Octobre</option>
-              <option value="11">Novembre</option>
-              <option value="12">Décembre</option>
-            </select>
-          </div>
-          <div id="comparison-scenario" style="display: none;">
-            <label for="comparison-scenario-selection">Scénario :</label>
-            <select id="comparison-scenario-selection">
-              <option value="rcp26">RCP 2.6</option>
-              <option value="rcp45">RCP 4.5</option>
-              <option value="rcp85">RCP 8.5</option>
-            </select>
-          </div>
-          <div class="comparison-container" style="display: none;">
-            <div id="map-container">
-              <div class="map main" id="map-main"></div>
-              <div class="map comparison" id="map-comparison"></div>
-            </div>
-            <!-- Curseur de comparaison -->
-            <div id="slider-container" class="slider-container">
-              <div id="slider" class="slider"></div>
-            </div>
-            <!-- Slider de pourcentage -->
-            <input type="range" id="comparison-slider" min="0" max="100" value="50" style="display: none;">
-          </div>
+      <!-- Section Comparaison -->
+      <section class="comparison">
+        <div id="comparison_choice">
+          <label for="comparison-checkbox">
+            <input type="checkbox" id="comparison-checkbox" /> Comparer ?
+          </label>
         </div>
+        <div id="comparison-climatic-factor" style="display: none;">
+          <label for="comparison-data-selection">Facteur climatique :</label>
+          <select id="comparison-data-selection">
+            <option value="comparison-precipitation">Précipitation</option>
+            <option value="comparison-temperature">Température</option>
+          </select>
+        </div>
+        <div id="comparison-year" style="display: none;">
+          <label for="comparison-year-selection">Année :</label>
+          <select id="comparison-year-selection">
+            <option value="91-10">1991 - 2010</option>
+            <option value="20-49">2020 - 2049</option>
+          </select>
+        </div>
+        <div id="comparison-month" style="display: none;">
+          <label for="comparison-month-selection">Mois :</label>
+          <select id="comparison-month-selection">
+            <option value="01">Janvier</option>
+            <option value="02">Février</option>
+            <option value="03">Mars</option>
+            <option value="04">Avril</option>
+            <option value="05">Mai</option>
+            <option value="06">Juin</option>
+            <option value="07">Juillet</option>
+            <option value="08">Août</option>
+            <option value="09">Septembre</option>
+            <option value="10">Octobre</option>
+            <option value="11">Novembre</option>
+            <option value="12">Décembre</option>
+          </select>
+        </div>
+        <div id="comparison-scenario" style="display: none;">
+          <label for="comparison-scenario-selection">Scénario :</label>
+          <select id="comparison-scenario-selection">
+            <option value="rcp26">RCP 2.6</option>
+            <option value="rcp45">RCP 4.5</option>
+            <option value="rcp85">RCP 8.5</option>
+          </select>
+        </div>
+        <!-- Curseur de comparaison -->
+        <div id="slider-container" style="margin-top: 20px;">
+          <label for="slider"></label>
+          <input type="range" id="slider" min="0" max="100" value="50" />
+        </div>
+      </section>
+    </aside>
+
+    <!-- Carte principale -->
+    <section class="main" id="map-container">
+      <div id="map"></div>
+      <div id="loading-message">⏳ Chargement en cours ...</div>
+      <div class="image-overlay">
+        <img id="image-display">
       </div>
+      <div class="comparison-container" style="display: none;"></div>
+    </section>
 
-      <!-- Carte principale -->
-      <div class="main" id="map-container">
-        <div id="map"></div>
-        <div class="image-overlay">
-          <img id="image-display" />
-        </div>
+    <!-- Légende -->
+    <aside class="right" id="legend">
+      <!-- Légende 1: Précipitation -->
+      <div class="box1">
+        <div class="legend-text" id="legend-text-precipitation"></div>
       </div>
-
-      <!-- Légende -->
-      <div class="right" id="legend">
-        <!-- Légende 1: Précipitation -->
-        <div class="box1">
-          <div class="legend-text" id="legend-text-precipitation"></div>
-        </div>
-        <div class="box2">
-          <div class="legend-image" id="legend-image-precipitation"></div>
-        </div>
+      <div class="box2">
+        <div class="legend-image" id="legend-image-precipitation"></div>
       </div>
-    </div>
+    </aside>
+  </main>
 
-    <!-- Footer Section -->
-    <div class="footer">
-      Origine des cartes : Clim25 <br> Auteures: Fiora Marine, Lorena Roulin 
-    </div>
-  </body>
+  <!-- Footer Section -->
+  <footer class="footer">
+    Origine des cartes : CHClim25 <br/>
+    Auteures : Fiora Marine, Lorena Roulin
+  </footer>
+</body>
 </html>
