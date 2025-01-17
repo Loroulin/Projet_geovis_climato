@@ -262,80 +262,64 @@ document.addEventListener('DOMContentLoaded', function () {
   // AJOUTER L'INTERACTIVITÉ DU MENU DÉROULANT COMPARISON
   ////////////////////////////////////////////////////////////
   function afficherComparaison() {
-    console.log("Affichage de la comparaison");
+      console.log("Affichage de la comparaison");
 
-    // Afficher le message de chargement
-    const loadingMessage = document.getElementById('loading-message');
-    loadingMessage.style.display = 'block';
+      // Afficher le message de chargement
+      const loadingMessage = document.getElementById('loading-message');
+      loadingMessage.style.display = 'block';
 
-    let facteurComparaison = document.getElementById('comparison-data-selection').value;
-    const anneeComparaison = document.getElementById('comparison-year-selection').value;
-    const moisComparaison = document.getElementById('comparison-month-selection').value;
-    const scenarioComparaison = document.getElementById('comparison-scenario-selection').value;
+      let facteurComparaison = document.getElementById('comparison-data-selection').value;
+      const anneeComparaison = document.getElementById('comparison-year-selection').value;
+      const moisComparaison = document.getElementById('comparison-month-selection').value;
+      let scenarioComparaison = document.getElementById('comparison-scenario-selection').value;
 
-    console.log("Facteur climatique :", facteurComparaison);
-    console.log("Année :", anneeComparaison);
-    console.log("Mois :", moisComparaison);
-    console.log("Scénario :", scenarioComparaison);
+      console.log("Facteur climatique :", facteurComparaison);
+      console.log("Année :", anneeComparaison);
+      console.log("Mois :", moisComparaison);
+      console.log("Scénario :", scenarioComparaison);
 
-    // Si facteurComparaison commence par "comparison-", on l'enlève
-    if (facteurComparaison.startsWith('comparison-')) {
-      facteurComparaison = facteurComparaison.replace('comparison-', '');
-    }
+      // Si facteurComparaison commence par "comparison-", on l'enlève
+      if (facteurComparaison.startsWith('comparison-')) {
+          facteurComparaison = facteurComparaison.replace('comparison-', '');
+      }
 
-    // Construire le nom de l'image selon les conditions
-    if (anneeComparaison === "91-10") {
-      imageNomComparison = `${facteurComparaison}_${anneeComparaison}_${moisComparaison}`;
-    } else {
-      imageNomComparison = `${facteurComparaison}_${anneeComparaison}_${moisComparaison}_${scenarioComparaison}`;
-    }
+      // Remplacer "2.6" par "26" ou autres ajustements pour le scénario
+      scenarioComparaison = scenarioComparaison.replace('.', '');
 
-    // Ajouter l'extension .png si elle manque
-    if (!imageNomComparison.endsWith('.png')) {
-      imageNomComparison += '.png';
-    }
+      // Construire le nom de l'image selon les conditions
+      let imageNomComparison;
+      if (anneeComparaison === "91-10") {
+          imageNomComparison = `${facteurComparaison}_${anneeComparaison}_${moisComparaison}`;
+      } else if (anneeComparaison === "20-49") {
+          imageNomComparison = `${facteurComparaison}_${anneeComparaison}_${moisComparaison}_${scenarioComparaison}`;
+      }
 
-    // URL ou source de l'image de comparaison
-    const urlComparaison = `../cartes/${imageNomComparison}`;
-    console.log('URL générée pour la comparaison :', urlComparaison);
+      // Ajouter l'extension .png si elle manque
+      if (!imageNomComparison.endsWith('.png')) {
+          imageNomComparison += '.png';
+      }
 
-    // Vérification de l'existence de l'élément comparison-overlay
-    const comparisonContainer = document.getElementById('comparison-overlay');
-    if (comparisonContainer) {
-      console.log('Container trouvé pour l\'image de comparaison.');
-      comparisonContainer.innerHTML = ''; // Vide le conteneur précédent
-    } else {
-      console.error('L\'élément comparison-overlay n\'existe pas.');
-    }
+      console.log("Nom de l'image de comparaison :", imageNomComparison);
 
-    // Créer l'élément img
-    const img = new Image();
-    img.src = urlComparaison;
+      // Charger l'image
+      const imagePath = `../cartes/${imageNomComparison}`;
+      const imageElement = document.getElementById('image-comparison');
+      imageElement.src = imagePath;
 
-    // Vérification du succès du chargement de l'image
-    img.onload = function() {
-        console.log('L\'image de comparaison a été chargée avec succès.');
-        // Mettre à jour la source de l'image dans le conteneur `.image-overlay`
-        const imgElement = document.getElementById("image-comparison");
-        imgElement.src = urlComparaison;
+      // Gérer les erreurs de chargement
+      imageElement.onerror = () => {
+          console.error("Erreur de chargement de l'image de comparaison :", imagePath);
+          loadingMessage.style.display = 'none';
+          alert("Impossible de charger l'image. Veuillez vérifier les paramètres.");
+      };
 
-        // Créer l'overlay d'image et l'ajouter à la carte
-        const imageBounds = [[45.739229409, 5.835645203], [47.85049233, 10.643212989]];
-
-        const overlay = L.imageOverlay(img.src, imageBounds).addTo(map);
-
-        // Cacher le message de chargement une fois l'image chargée
-        loadingMessage.style.display = 'none';
-    };
-
-    // Gestion de l'erreur de chargement de l'image
-    img.onerror = function() {
-        console.error("Erreur de chargement de l'image de comparaison :", urlComparaison);
-        alert("Erreur : l'image de comparaison n'a pas pu être chargée.");
-        // Cacher le message de chargement même en cas d'erreur
-        loadingMessage.style.display = 'none';
-    };
+      // Lorsque l'image est chargée avec succès
+      imageElement.onload = () => {
+          console.log("Image chargée avec succès :", imagePath);
+          loadingMessage.style.display = 'none';
+      };
   }
+
 
   // Ajouter les écouteurs d'événements
   document.getElementById('comparison-data-selection').addEventListener('change', afficherComparaison);
@@ -358,10 +342,16 @@ document.addEventListener('DOMContentLoaded', function () {
     dragLine.style.left = sliderVal + "%";  // Mise à jour du dragLine
     sliderIcon.style.left = sliderVal + "%";  // Mise à jour de l'icône du slider
   };
-
+  ///////////////////////////////////////////////////////////
+  // Interactivité avec le slider
+  /////////////////////////////////////////////////////////
   slider.addEventListener('input', (e) => {
       const sliderValue = e.target.value;
-      imageComparison.style.clipPath = `inset(0 0 0 ${sliderValue}%)`;
+      const maxClipValue = 100; // Valeur maximum du clip (100%)
+      const newClipValue = Math.min(sliderValue, maxClipValue); // Assurez-vous qu'il ne dépasse pas 100%
+      
+      // Appliquez le clipPath pour masquer la partie gauche de l'image
+      imageComparison.style.clipPath = `inset(0 0 0 ${newClipValue}%)`;
   });
 
   ///////////////////////////////////////////////////////////
@@ -389,16 +379,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
 
-/*
-  ////////////////////////////////////////////////////////////
-  // Ajouter interactivité lors du survol
-  ////////////////////////////////////////////////////////////
-  slider.addEventListener('mousedown', function(event) {
-      console.log('Événement mousedown détecté');
-  });
-
-/*
-
 
  // Écouter les changements de la position du slider
     slider.addEventListener("input", () => {
@@ -407,16 +387,6 @@ document.addEventListener('DOMContentLoaded', function () {
         comparisonOverlay.style.clipPath = `inset(0 ${100 - value}% 0 0)`; // Ajuster le découpage
     });
 
-
-
-/*
-    // Écouter l'événement de changement de valeur du curseur
-    slider.addEventListener('input', function() {
-      const position = (slider.value / slider.max) * 100;  // Calculer la position
-      dragLine.style.left = `${position}%`;  // Déplacer la ligne de drag
-    });
-
-*/
 
 
 });//ceci est la fin de addeventlistener.

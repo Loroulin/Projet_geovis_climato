@@ -161,13 +161,16 @@ select:disabled {
 /* Image de droite, initialement coupée */
 #image-comparison {
     position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
+    top: 50%; /* Centré verticalement */
+    left: 50%; /* Centré horizontalement */
+    transform: translate(-50%, -50%); /* Centre l'image */
+    width: 130%; /* Ajuste automatiquement la largeur */
+    height: 130%; /* Ajuste automatiquement la hauteur */
+    object-fit: contain; /* Conserve les proportions de l'image */
+    clip-path: inset(0 50% 0 0); /* Ajuste la découpe initiale */
     transition: clip-path 0.1s ease;
 }
+
 
 
 /* Conteneur principal du slider */
