@@ -112,24 +112,36 @@
             <option value="rcp85">RCP 8.5</option>
           </select>
         </div>
-        <!-- Curseur de comparaison -->
-        <div id="slider-container" style="margin-top: 20px;">
-          <label for="slider"></label>
-          <input type="range" id="slider" min="0" max="100" value="50" />
-        </div>
       </section>
     </aside>
 
     <!-- Carte principale -->
-    <section class="main" id="map-container">
+    <section class="main">
       <div id="map"></div>
       <div id="loading-message">⏳ Chargement en cours ...</div>
-      <div class="image-overlay">
-        <img id="image-display">
-      </div>
-      <div class="comparison-container" style="display: none;"></div>
-    </section>
+      <div class = "wrapper">
+        <!-- Zone de superposition des images pour le slider -->
+        <div class="image-overlay">
+          <img id="image-origin" src="" alt="Image d'origine">
+        </div>
+        <div class= "comparison-overlay">
+          <img id="image-comparison" src="" alt="Image de comparaison">
+        </div>
 
+        <!-- Curseur de comparaison -->
+        <div class="slider">
+          <input type="range" class="slider-range" min="0" max="100" value="50" />
+          <div class="drag-line">
+            <span class="slider-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 15 12 18.75 15.75 15m-7.5-6L12 5.25 15.75 9" />
+              </svg>
+            </span>
+          </div>
+        </div>
+
+
+  </section>
     <!-- Légende -->
     <aside class="right" id="legend">
       <!-- Légende 1: Précipitation -->

@@ -53,7 +53,7 @@ p {
   box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
   z-index: 9999;
   width: 80%; /* Ajustement de la largeur pour des écrans plus petits */
-  max-width: 300px; /* Limitation de la largeur */
+  max-width: 200px; /* Limitation de la largeur */
 }
 
 /*///le style des différents div///*/
@@ -64,22 +64,17 @@ p {
     padding: 5px;
 }
 
-
-
-
-
-
-
-
-
-
-
+.left, .main, .right {
+    width: 100%;
+}
+ 
 /*///la partie gauche////*/
 .left {
     flex: 0 0 15%; 
     background-color: #dcdcdc;
 }
 
+/* STYLE DU MENU DEROULANT */
 /*Ajout des marges aux titres du menu déroulant*/
 .origin {
     margin-bottom: 20px;
@@ -95,7 +90,7 @@ p {
 /*style des noms des menus déroulants*/
 .left label {
     display: block;
-    margin-bottom: 5px;
+    margin-bottom: 10px;
     font-weight: bold;
     color: #303030;
     font-size: 12px;
@@ -117,16 +112,12 @@ select:disabled {
     cursor: not-allowed; /* Changer le curseur pour indiquer l'interdiction */
 }
 
+/*/////////////////////////////////////////////////////////////////////////////////////////*/
 
-
-
-
-
-
-
-
-/*///la partie centrale///*/
+/* PARTIE CENTRALE */
 .main {
+    display: flex;
+    position:relative;
     flex: 1 1 80%; /* Pour la carte principale */
     height: 100%;
     width: 100%;
@@ -134,186 +125,163 @@ select:disabled {
     box-sizing: border-box; /* Inclut padding et bordure dans les dimensions */
 }
 
-/*le contenant de la map*/
-#map-container {
-    position: relative;
-    width: 100%;
-    height: 100%;
-}
-/*la carte*/
 #map {
     position: absolute;
-    width: 100%;
+    width:100%;
     height: 100%;
-    z-index: 1; /* Assure que la carte est en arrière-plan */
-}
-
-/*l'ajout des raster à la carte*/
-.image-overlay {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    z-index: 10;
-    pointer-events: none; /* Permet les interactions avec la carte */
+    z-index: 1;
 }
 
 
-/*le contrôle du zoom*/
-.zoom-control {
-    display: flex;
-    flex-direction: column; /* Empile les boutons verticalement */
-    position: absolute;
-    bottom: 30px;
-    right: 10px;
-    z-index: 50; /* S'assure qu'il est au-dessus de tout autre contenu */
-}
-/*les boutons de zoom*/
-.zoom-in-button,
-.zoom-out-button {
-    background-color: #fff;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    margin: 2.5px 0;
-    cursor: pointer; /* Change le curseur sur hover */
-    width: 30px;
-    height: 30px;
-    font-size: 18px;
-}
-/*change la couleur lors du passage de la souris*/
-.zoom-in-button:hover, .zoom-out-button:hover {
-    background-color: #f0f0f0; /* Légère variation de couleur au survol */
-    transform: scale(1.1); /* Effet de zoom */
-    transition: all 0.2s ease;
-}
 
-/*l'attribution leaflet*/
-.leaflet-control-attribution {
-    position: absolute;
-    bottom: 10px;  /* Garder l'espacement depuis le bas */
-    left: 10px;   /* Positionner à droite */
-    z-index: 100;
-    background-color: rgba(255, 255, 255, 0.9);
-    padding: 5px;
-    border-radius: 5px;
-    font-size: 8px !important;
-    width: 150px;  /* Ajustez la largeur si nécessaire */
-}
-
-/*placement de l'échelle*/
-.leaflet-control-scale {
-    position: absolute;
-    bottom: 10px;  /* Décaler l'échelle vers le haut */
-    right: 10px;
-    z-index: 100;
-}
-
-/*le bouton d'opacité*/
-.opacity-control {
-    background-color: rgba(255, 255, 255, 0.9);
-    padding: 10px; /* Augmente l'espace intérieur */
-    border-radius: 5px;
-    font-size: 16px; /* Augmente la taille du texte à l'intérieur */
-    position: absolute;
-    top: 20px;
-    left: 10px;
-    width: 100px; /* Définit une largeur explicite */
-    height: 40px; /* Définit une hauteur explicite */
-}
-
-/* Applique le curseur main sur le slider d'opacité */
-.opacity-control input[type="range"] {
-    cursor: pointer; /* Changer le curseur en main */
-}
-
-.comparison-container {
+/* les différentes images */
+.wrapper {
     position: relative;
     width: 100%;
-    height: 100%;
+    height: calc(100vh - 120px);
+    z-index: 2; 
+    overflow: hidden;
 }
 
-.comparison-container input[type="range"] {
+.image-overlay, .comparison-overlay {
+    width: 100%;
+    height: 100%; 
     position: absolute;
-    top: 50%; /* Centre verticalement */
-    left: 50%; /* Centre horizontalement */
-    transform: translate(-50%, -50%); /* Ajuste pour centrer parfaitement */
-    -webkit-appearance: none;
-    appearance: none;
-    width: 80%; /* Ajustez selon vos besoins */
+    top: 0;
+    left: 0; 
+}
+/* Image de gauche (entièrement visible) */
+#image-origin {
+    position: absolute; /* Pour superposer l'image de gauche */
+    top: 0;
+    left: 0;
+    object-fit: contain; /* Assure que l'image couvre toute la zone sans être déformée */
+}
+
+/* Image de droite, initialement coupée */
+#image-comparison {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: clip-path 0.1s ease;
+}
+
+
+/* Conteneur principal du slider */
+.slider {
+    position: absolute;
+    top: 0px; /* Le slider commence au sommet du conteneur */
+    left: 0;
+    z-index: 10;
+    width: 100%;   /* Largeur à 100% pour prendre toute la largeur de .main */
+    height: calc(100vh - 120px); /* Hauteur ajustée du slider */
+    /*display: none  ;*/
+}
+
+
+/* CURSEUR COMPARATIF */
+.wrapper .slider {
+    position: relative;
+    width: 100%;
+    z-index: 999;
     background-color: transparent;
-    z-index: 1000;
+    opacity: 0.3; /* Réduit la visibilité du slider */
+    transition: opacity 0.3s ease; /* Effet de transition pour l'apparition du slider */
 }
 
-.comparison-container input[type="range"]::-webkit-slider-thumb {
+/* Lorsque le curseur est au-dessus du slider */
+.wrapper .slider:hover {
+    pointer-events: auto; /* Active l'interaction */
+    opacity: 1; /* Restaure la visibilité du slider */
+}
+
+.wrapper .slider input {
+    width: 100%;
+    background-color: #ccc; /* Optionnel, pour donner une couleur de fond */
+    outline: none;
     -webkit-appearance: none;
     appearance: none;
-    display: block;
-    width: 10px;
-    height: 20px;
-    background: #5b83dc;
-    cursor: pointer;
+    background: none;
+}
+.slider input::-webkit-slider-thumb {
+    position: relative;
+    border: 2px solid transparent;
+    -webkit-appearance: none;
+    height: calc(100vh - 120px);
+    top: -2px;
+    width: 50px;
+    cursor: col-resize;
 }
 
-.comparison-container input[type="range"]::-webkit-slider-thumb:active {
-    background: #e25a5a;
-    transition: all 300ms ease-in-out;
+/* Ligne du drag-line */
+.slider .drag-line {
+    position: absolute;
+    top: 0px;
+    left: 50%;
+    width: 5px;
+    height: 100%;
+    transform: translateX(-50%);
+    background-color: #000;
+    opacity: 0.5;
 }
 
-/*///la partie droite///*/
-/* Conteneur principal à droite */
+/* Icône au centre du slider */
+.slider .slider-icon {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 40px;
+    height: 40px;
+    background-color: #000;
+    border-radius: 50%;
+    color: #fff;
+    z-index: 2;
+    transform: translate(-50%, -50%) rotateZ(90deg);
+}
+
+
+
+
+/*  */
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* //////////////////////////////////////////////////////////////////////////////////////// */
 .right {
-    flex: 0 0 20%; /* Fixe la largeur à 20% */
-    background-color: #dcdcdc; /* Couleur de fond */
-    display: flex; /* Utilise Flexbox */
-    flex-direction: column; /* Empile les enfants verticalement */
-    padding: 10px; /* Espacement intérieur */
+    flex: 0 0 20%;
+    display: flex;
+    flex-direction: column;
+    padding: 10px;
+    background-color:#dcdcdc ;
 }
 
-/* Texte de la légende */
-.legend-text p {
-    font-size: 14px;
-    color: #333;
-    margin-bottom: 10px;
-    max-height: 150px; /* Hauteur maximale pour le texte */
-    overflow-y: auto; /* Défilement vertical si nécessaire */
-    background-color: #f9f9f9; /* Couleur de fond */
-    padding: 10px; /* Espacement intérieur */
-    box-sizing: border-box; /* Inclut padding dans la hauteur */
-    border-radius: 5px; /* Bordures arrondies */
-    border: 1px solid #ccc; /* Bordure discrète */
-}
-
-/* Scrollbar stylisée pour la légende de texte */
-.legend-text::-webkit-scrollbar {
-    width: 8px;
-}
-.legend-text::-webkit-scrollbar-thumb {
-    background-color: rgba(0, 0, 0, 0.4);
-    border-radius: 3px;
-}
-.legend-text::-webkit-scrollbar-track {
-    background-color: rgba(0, 0, 0, 0.2);
-    border-radius: 3px;
-}
-
-/* Image de la légende */
-.legend-image {
-    display: flex; /* Centre le contenu */
-    justify-content: center;
-    align-items: center;
-    width: 100%; /* Prend toute la largeur du conteneur */
-    max-height: 250px; /* Limite la hauteur de l'image */
-    overflow: hidden; /* Cache les parties de l'image qui dépassent */
-    background-color: #fff;
-    border: 1px solid #ccc;
-    border-radius: 5px; /* Bordures arrondies */
-}
-
-/* Ajuster l'image à l'intérieur de la légende */
-.legend-image img {
-    max-height: 100px; /* Hauteur maximale */
-    height: auto; /* Conserve le ratio d'aspect */
-    object-fit: contain; /* Ajuste sans déformer */
-}
 
 /* Footer */
 .footer {

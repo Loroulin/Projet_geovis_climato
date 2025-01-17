@@ -90,7 +90,6 @@ document.addEventListener('DOMContentLoaded', function () {
   ////////////////////////////////////////////////////////////
   //AJOUTER LES IMAGES PAR DEFAUT
   ////////////////////////////////////////////////////////////
-
   //Mettre les années 91-10 par défaut
   // Initialiser les éléments de sélection
   const anneeSelection = document.getElementById("year-selection");
@@ -117,8 +116,7 @@ document.addEventListener('DOMContentLoaded', function () {
       scenarioMenu.disabled = true;
       scenarioMenu.value = "";
     }
-
-  afficherSelectionOrigin();
+    afficherSelectionOrigin();
   }
 
   ////////////////////////////////////////////////////////////
@@ -153,7 +151,6 @@ document.addEventListener('DOMContentLoaded', function () {
   ////////////////////////////////////////////////////////////
   // BLOQUER SCENARIO POUR COMPARAISON 91-10
   ////////////////////////////////////////////////////////////
-
   function toggleScenarioSelection() {
     const yearSelection = document.getElementById('comparison-year-selection');
     const scenarioSelection = document.getElementById('comparison-scenario-selection');
@@ -190,11 +187,13 @@ document.addEventListener('DOMContentLoaded', function () {
   // Initialisation pour s'assurer que l'état correct est appliqué au chargement de la page
   toggleScenarioSelection();
 
+
   ////////////////////////////////////////////////////////////
   // AFFICHER LES IMAGES D'ORIGINES
   ////////////////////////////////////////////////////////////
-  // Fonction qui actualise l'image en fonction des sélections
+  let climateOverlay = null; // Variable pour stocker la superposition actuelle
    function afficherSelectionOrigin() {
+    console.log("Affichage de l'image d'origine");
     const facteurClimatique = document.getElementById("data-selection").value;
     const annee = document.getElementById("year-selection").value;
     const mois = document.getElementById("month-selection").value;
@@ -217,12 +216,16 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     // Créer le chemin de l'image
-    const cheminImage = `../cartes/${imageNom}`;
+    const URLImage = `../cartes/${imageNom}`;
 
     // Vérifier que l'image existe
     const img = new Image();
-    img.src = cheminImage;
+    img.src = URLImage;
     img.onload = function() {
+        // Mettre à jour la source de l'image dans le conteneur `.image-overlay`
+        const imgElement = document.getElementById("image-origin");
+        imgElement.src = URLImage;
+      //emprise de l'image
       const bounds = [[45.739229409, 5.835645203], [47.85049233, 10.643212989]];
 
       // Si une image de superposition existe déjà, la retirer avant de rajouter la nouvelle
@@ -231,24 +234,23 @@ document.addEventListener('DOMContentLoaded', function () {
       }
 
       // Ajouter la nouvelle image comme superposition sur la carte
-      climateOverlay = L.imageOverlay(cheminImage, bounds);
+      climateOverlay = L.imageOverlay(URLImage, bounds);
       climateOverlay.addTo(map); // Ajouter l'overlay de l'image à la carte
 
       // Cacher le message de chargement une fois l'image chargée
       document.getElementById('loading-message').style.display = 'none';
     };
 
-    img.onerror = function() {
-      // Si l'image ne se charge pas, on la supprime (au cas où une image invalide serait affichée)
-      if (climateOverlay) {
-        climateOverlay.remove();
-      }
+    img.onerror = function () {
+    // Gérer l'erreur si l'image n'est pas trouvée
+    document.getElementById("loading-message").style.display = "none";
+    alert("L'image demandée n'existe pas ou n'a pas pu être chargée.");
 
-      // Cacher le message de chargement si l'image échoue
-      document.getElementById('loading-message').style.display = 'none';
-    };
+    // Réinitialiser l'image d'origine
+    const imgElement = document.getElementById("image-origin");
+    imgElement.src = ""; // Supprimer l'image affichée
+  };
   }
-
 
   // Mettre à jour l'image chaque fois qu'un paramètre change
   document.getElementById("data-selection").addEventListener("change", afficherSelectionOrigin); // Appelle `afficherSelectionOrigin` pour le facteur climatique
@@ -256,253 +258,165 @@ document.addEventListener('DOMContentLoaded', function () {
   document.getElementById("month-selection").addEventListener("change", afficherSelectionOrigin); // Appelle `afficherSelectionOrigin` pour le mois
   document.getElementById("scenario-selection").addEventListener("change", afficherSelectionOrigin); // Appelle `afficherSelectionOrigin` pour le scénario
 
-
   ////////////////////////////////////////////////////////////
-  // AJOUTER L'INTRACTIVITE DU MENU DEROULANT COMPARISON
-  //////////////////////////////////////////////////////////
-  //let comparisonOverlay = null; // Couche pour les images de comparaison
-
+  // AJOUTER L'INTERACTIVITÉ DU MENU DÉROULANT COMPARISON
+  ////////////////////////////////////////////////////////////
   function afficherComparaison() {
-    // Logique pour afficher la comparaison des données
     console.log("Affichage de la comparaison");
 
     // Afficher le message de chargement
-    document.getElementById('loading-message').style.display = 'block';
+    const loadingMessage = document.getElementById('loading-message');
+    loadingMessage.style.display = 'block';
 
     let facteurComparaison = document.getElementById('comparison-data-selection').value;
     const anneeComparaison = document.getElementById('comparison-year-selection').value;
     const moisComparaison = document.getElementById('comparison-month-selection').value;
     const scenarioComparaison = document.getElementById('comparison-scenario-selection').value;
-    let imageNomComparison = '';
+
+    console.log("Facteur climatique :", facteurComparaison);
+    console.log("Année :", anneeComparaison);
+    console.log("Mois :", moisComparaison);
+    console.log("Scénario :", scenarioComparaison);
 
     // Si facteurComparaison commence par "comparison-", on l'enlève
     if (facteurComparaison.startsWith('comparison-')) {
-        facteurComparaison = facteurComparaison.replace('comparison-', '');
+      facteurComparaison = facteurComparaison.replace('comparison-', '');
     }
 
-    // Logique conditionnelle pour définir le nom de l'image selon l'année
+    // Construire le nom de l'image selon les conditions
     if (anneeComparaison === "91-10") {
-        imageNomComparison = `${facteurComparaison}_${anneeComparaison}_${moisComparaison}`;
-    } else if (anneeComparaison === "20-49") {
-        imageNomComparison = `${facteurComparaison}_${anneeComparaison}_${moisComparaison}_${scenarioComparaison}`;
+      imageNomComparison = `${facteurComparaison}_${anneeComparaison}_${moisComparaison}`;
     } else {
-        imageNomComparison = `${facteurComparaison}_${anneeComparaison}_${moisComparaison}_${scenarioComparaison}`;
+      imageNomComparison = `${facteurComparaison}_${anneeComparaison}_${moisComparaison}_${scenarioComparaison}`;
     }
 
-    // Si l'extension .png n'est pas déjà présente, l'ajouter
+    // Ajouter l'extension .png si elle manque
     if (!imageNomComparison.endsWith('.png')) {
-        imageNomComparison += '.png';
+      imageNomComparison += '.png';
     }
 
     // URL ou source de l'image de comparaison
     const urlComparaison = `../cartes/${imageNomComparison}`;
-    console.log('URL générée pour la comparaison :', urlComparaison); // Debugging
+    console.log('URL générée pour la comparaison :', urlComparaison);
 
-    // Supprimer la couche de comparaison précédente si elle existe
-    if (comparisonOverlay) {
-        map.removeLayer(comparisonOverlay);
+    // Vérification de l'existence de l'élément comparison-overlay
+    const comparisonContainer = document.getElementById('comparison-overlay');
+    if (comparisonContainer) {
+      console.log('Container trouvé pour l\'image de comparaison.');
+      comparisonContainer.innerHTML = ''; // Vide le conteneur précédent
+    } else {
+      console.error('L\'élément comparison-overlay n\'existe pas.');
     }
 
-    // Ajouter la nouvelle couche de comparaison
-    comparisonOverlay = L.imageOverlay(urlComparaison, [[45.739229409, 5.835645203], [47.85049233, 10.643212989]], {
-        opacity: currentOpacity,
-    }).addTo(map);
+    // Créer l'élément img
+    const img = new Image();
+    img.src = urlComparaison;
 
-    // Cacher le message de chargement une fois l'image de comparaison ajoutée
-    document.getElementById('loading-message').style.display = 'none';
+    // Vérification du succès du chargement de l'image
+    img.onload = function() {
+        console.log('L\'image de comparaison a été chargée avec succès.');
+        // Mettre à jour la source de l'image dans le conteneur `.image-overlay`
+        const imgElement = document.getElementById("image-comparison");
+        imgElement.src = urlComparaison;
+
+        // Créer l'overlay d'image et l'ajouter à la carte
+        const imageBounds = [[45.739229409, 5.835645203], [47.85049233, 10.643212989]];
+
+        const overlay = L.imageOverlay(img.src, imageBounds).addTo(map);
+
+        // Cacher le message de chargement une fois l'image chargée
+        loadingMessage.style.display = 'none';
+    };
+
+    // Gestion de l'erreur de chargement de l'image
+    img.onerror = function() {
+        console.error("Erreur de chargement de l'image de comparaison :", urlComparaison);
+        alert("Erreur : l'image de comparaison n'a pas pu être chargée.");
+        // Cacher le message de chargement même en cas d'erreur
+        loadingMessage.style.display = 'none';
+    };
   }
 
-
+  // Ajouter les écouteurs d'événements
   document.getElementById('comparison-data-selection').addEventListener('change', afficherComparaison);
   document.getElementById('comparison-year-selection').addEventListener('change', afficherComparaison);
   document.getElementById('comparison-scenario-selection').addEventListener('change', afficherComparaison);
 
-  ////////////////////////////////////////////////////////////
-  // AJOUTER LE SLIDER
-  //////////////////////////////////////////////////////////
-  document.getElementById('comparison-checkbox').addEventListener('change', function() {
-    var sliderContainer = document.getElementById('slider-container');
-    if (this.checked) {
-      sliderContainer.style.display = 'block'; // Afficher le curseur
-    } else {
-      sliderContainer.style.display = 'none'; // Masquer le curseur
-    }
+  ///////////////////////////////////////////////////////////
+  // CREATION DU SLIDER
+  /////////////////////////////////////////////////////////
+  const slider = document.querySelector(".slider input");
+  const dragLine = document.querySelector(".slider .drag-line");
+  const sliderIcon = document.querySelector(".slider .slider-icon");
+  const imageComparison = document.getElementById('image-comparison');
+
+  ///////////////////////////////////////////////////////////
+  // LIER LE SLIDER INPUT AU -WEBKIT-SLIDER-THUMB
+  /////////////////////////////////////////////////////////
+  slider.oninput = () => {
+    let sliderVal = slider.value;
+    dragLine.style.left = sliderVal + "%";  // Mise à jour du dragLine
+    sliderIcon.style.left = sliderVal + "%";  // Mise à jour de l'icône du slider
+  };
+
+  slider.addEventListener('input', (e) => {
+      const sliderValue = e.target.value;
+      imageComparison.style.clipPath = `inset(0 0 0 ${sliderValue}%)`;
   });
 
-
-  ////////////////////////////////////////////////////////////
-  // AJOUTER L'INTERACTIVITÉ DE LA LÉGENDE
-  ////////////////////////////////////////////////////////////
-  // Sélectionner les éléments
-  /*
-  const dataSelection = document.getElementById('data-selection');
-  const comparisonSelection = document.getElementById('comparison-data-selection');
-  const precipitationLegend = document.getElementById('precipitation-legend');
-  const temperatureLegend = document.getElementById('temperature-legend');
+  ///////////////////////////////////////////////////////////
+  // GESTION DE L'APPARITION DU SLIDER UNIQUEMENT LORS DE LA COMPARAISON
+  /////////////////////////////////////////////////////////
   const comparisonCheckbox = document.getElementById('comparison-checkbox');
-  const legendDiv = document.getElementById('legend');
 
-  // Variables pour suivre les sélections principales et de comparaison
-  let selectedValue = ''; // Valeur de la sélection principale (precipitation ou temperature)
-  let selectedComparisonValue = ''; // Valeur de la sélection de comparaison (précipitation ou température)
-  let lastUsedLegend = 'null'; // Stockera la dernière légende affichée : 'precipitation' ou 'temperature' --> pour ne pas avoir double légende dès le checkbox checked. 
-
-  // Ajouter un écouteur d'événement pour capturer la sélection principale
-  dataSelection.addEventListener('change', function() {
-    selectedValue = dataSelection.value;
-    console.log("Selected Value:", selectedValue);  // Pour vérifier dans la console
-    updateLegend();  // Met à jour la légende après chaque changement de sélection
-  });
-
-  // Ajouter un écouteur d'événement pour capturer la sélection de comparaison
-  comparisonSelection.addEventListener('change', function() {
-    selectedComparisonValue = comparisonSelection.value;
-    console.log("Selected Comparison Value:", selectedComparisonValue);  // Pour vérifier dans la console
-    updateLegend();  // Met à jour la légende après chaque changement de sélection
-  });
-  //Ecourteur d'évènement
-  comparisonCheckbox.addEventListener('change', function () {
-  updateLegend(); // Met à jour la légende lors du changement d'état de la case à cocher
-  });
-
-// Fonction updateLegend qui utilise selectedComparisonValue
-function updateLegend() {
-  // Aucune sélection effectuée
-  if (!selectedValue && !selectedComparisonValue && !comparisonCheckbox.checked) {
-    legendDiv.innerHTML = '<p>Aucune donnée sélectionnée. Veuillez choisir une option.</p>';
-    console.log("Aucune donnée sélectionnée.");
-    return;
-  }
-  // Si aucune des conditions ci-dessus n'est remplie, afficher les données non reconnues
-  if (!selectedValue || !selectedComparisonValue) {
-    legendDiv.innerHTML = '<p>Données non reconnues. Veuillez vérifier votre sélection.</p>';
-    console.log("Données non reconnues.");
-  }
-
-  // Si le checkbox de comparaison n'est pas activé
-  if (!comparisonCheckbox.checked) {
-    console.log("Selected Data:", selectedValue);  // Vérifie la sélection des données
-    if (selectedValue === 'precipitation') {
-      legendDiv.innerHTML = `
-        <h3>Évaluation des Précipitations</h3>
-        <p>Les scénarios climatiques CH2018 fournissent des projections sur les précipitations sur une période de 30 ans, basées sur trois scénarios : RCP 2.6, RCP 4.5 et RCP 8.5 (Rapport technique CH2018, 2018). Chacun de ces scénarios illustre les évolutions potentielles des précipitations en fonction des gaz à effet de serre émis actuellement et dans le futur, ainsi que des différentes mesures climatiques qui pourraient être mises en œuvre (GIEC, 2023). Présentées mensuellement, ces données intègrent des incertitudes, permettant ainsi une analyse approfondie des impacts climatiques.</p>
-        <img src="../readme_pictures/legende_precipitation.png" alt="Légende de précipitation" style="width:70%;">
-      `;
-      console.log("Affichage légende précipitations");
-    } else if (selectedValue === 'temperature') {
-      legendDiv.innerHTML = `
-        <h3>Évaluation des Températures</h3>
-        <p>Les scénarios climatiques CH2018 fournissent des projections sur les températures sur une période de 30 ans, basées sur trois scénarios : RCP 2.6, RCP 4.5 et RCP 8.5 (Rapport technique CH2018, 2018). Chacun de ces scénarios illustre les évolutions potentielles des températures en fonction des gaz à effet de serre émis actuellement et dans le futur, ainsi que des différentes mesures climatiques qui pourraient être mises en œuvre (GIEC, 2023). Présentées mensuellement, ces données intègrent des incertitudes, permettant ainsi une analyse approfondie des impacts climatiques.</p>
-        <img src="../readme_pictures/legende_temperature.png" alt="Légende de température" style="width:70%;">
-      `;
-      console.log("Affichage légende températures");
-    }
-  } else if (comparisonCheckbox.checked) {
-    console.log("Checkbox activée. Comparaison des deux valeurs...");
-    // Si le checkbox est activé, comparer les deux valeurs
-    if (selectedValue === 'precipitation' && selectedComparisonValue === 'comparison-precipitation') {
-      console.log("Les deux sélections sont 'precipitation'. Affichage de la légende des précipitations uniquement.");
-      legendDiv.innerHTML = `
-        <h3>Évaluation des Précipitations - Comparaison de données</h3>
-        <p>Les scénarios climatiques CH2018 fournissent des projections sur les précipitations sur une période de 30 ans, basées sur trois scénarios : RCP 2.6, RCP 4.5 et RCP 8.5 (Rapport technique CH2018, 2018). Chacun de ces scénarios illustre les évolutions potentielles des précipitations en fonction des gaz à effet de serre émis actuellement et dans le futur, ainsi que des différentes mesures climatiques qui pourraient être mises en œuvre (GIEC, 2023). Présentées mensuellement, ces données intègrent des incertitudes, permettant ainsi une analyse approfondie des impacts climatiques.</p>
-        <img src="../readme_pictures/legende_precipitation.png" alt="Légende de précipitation" style="width:70%;">
-      `;
-    } else if (selectedValue === 'temperature' && selectedComparisonValue === 'comparison-temperature') {
-      console.log("Les deux sélections sont 'temperature'. Affichage de la légende des températures uniquement.");
-      legendDiv.innerHTML = `
-        <h3>Évaluation des Températures</h3>
-        <p>Les scénarios climatiques CH2018 fournissent des projections sur les températures sur une période de 30 ans, basées sur trois scénarios : RCP 2.6, RCP 4.5 et RCP 8.5 (Rapport technique CH2018, 2018). Chacun de ces scénarios illustre les évolutions potentielles des températures en fonction des gaz à effet de serre émis actuellement et dans le futur, ainsi que des différentes mesures climatiques qui pourraient être mises en œuvre (GIEC, 2023). Présentées mensuellement, ces données intègrent des incertitudes, permettant ainsi une analyse approfondie des impacts climatiques.</p>
-        <img src="../readme_pictures/legende_temperature.png" alt="Légende de température" style="width:70%;">
-      `;
+  // Ajouter un écouteur d'événement pour la case à cocher
+  // Lorsque la case est cochée, afficher le slider
+  comparisonCheckbox.addEventListener('change', function() {
+    if (comparisonCheckbox.checked) {
+      // Si la case est cochée, afficher le slider
+      slider.style.display = 'block';  // Correction ici
+      dragLine.style.display = 'block';
+      sliderIcon.style.display = 'block';
+      console.log("Slider affiché");
     } else {
-      console.log("Les sélections sont différentes ou non définies. Affichage des deux légendes.");
-      console.log("selectedValue:", selectedValue, "| selectedComparisonValue:", selectedComparisonValue);
-      // Afficher les deux légendes si les deux sont sélectionnées mais ne correspondent pas
-      legendDiv.innerHTML = `
-        <h3>Évaluation des Températures et Précipitations</h3>
-        <img src="../readme_pictures/legende_temperature.png" alt="Légende de température" style="width:50%;">
-        <img src="../readme_pictures/legende_precipitation.png" alt="Légende de précipitation" style="width:50%;">
-      `;
+      // Si la case n'est pas cochée, masquer le slider
+      slider.style.display = 'none';
+      dragLine.style.display = 'none';
+      sliderIcon.style.display = 'none';
+      console.log("Slider masqué");
     }
-  }
-  };
-  */
+  });
 
-    ////////////////////////////////////////////////////////////
-  // CREE LE SLIDE D'OPACITE
+
+
+/*
   ////////////////////////////////////////////////////////////
- 
-  // Initialisation de l'opacité
-  let currentOpacity = 1;
-  let climateOverlay; // Référence à l'overlay climatique
-  let comparisonOverlay; // Référence à l'overlay de comparaison
- /*
-  // Créer le contrôle d'opacité pour les images
-  const opacityControl = L.control({ position: 'topleft' });
+  // Ajouter interactivité lors du survol
+  ////////////////////////////////////////////////////////////
+  slider.addEventListener('mousedown', function(event) {
+      console.log('Événement mousedown détecté');
+  });
 
-  opacityControl.onAdd = function () {
-    const container = L.DomUtil.create('div', 'opacity-control');
-    container.style.backgroundColor = 'rgba(255, 255, 255, 0.7)';
-    container.style.padding = '10px';
-    container.style.borderRadius = '5px';
-    container.style.fontSize = '12px';
-    container.style.boxShadow = '0 2px 6px rgba(0,0,0,0.2)';
+/*
 
-    // Étiquette pour le slider
-    const opacityLabel = L.DomUtil.create('label', '', container);
-    opacityLabel.innerHTML = 'Opacité :';
-    opacityLabel.style.display = 'block';
-    opacityLabel.style.marginBottom = '5px';
 
-    // Slider d'opacité
-    const opacitySlider = L.DomUtil.create('input', '', container);
-    opacitySlider.type = 'range';
-    opacitySlider.min = 0;
-    opacitySlider.max = 100;
-    opacitySlider.value = currentOpacity * 100; // Applique l'opacité actuelle du curseur
-    opacitySlider.style.width = '100%';
-
-    // Désactiver les interactions de la carte lorsque l'utilisateur interagit avec le slider
-    opacitySlider.addEventListener('mousedown', function () {
-      map.dragging.disable();
-      map.doubleClickZoom.disable();
-      map.scrollWheelZoom.disable();
+ // Écouter les changements de la position du slider
+    slider.addEventListener("input", () => {
+        const value = slider.value; // Valeur du slider (0 à 100)
+        dragLine.style.left = `${value}%`; // Déplacer la ligne de séparation
+        comparisonOverlay.style.clipPath = `inset(0 ${100 - value}% 0 0)`; // Ajuster le découpage
     });
 
-    // Réactiver les interactions de la carte lorsque l'utilisateur relâche le slider
-    opacitySlider.addEventListener('mouseup', function () {
-      map.dragging.enable();
-      map.doubleClickZoom.enable();
-      map.scrollWheelZoom.enable();
+
+
+/*
+    // Écouter l'événement de changement de valeur du curseur
+    slider.addEventListener('input', function() {
+      const position = (slider.value / slider.max) * 100;  // Calculer la position
+      dragLine.style.left = `${position}%`;  // Déplacer la ligne de drag
     });
 
-    // Ajuste l'opacité en temps réel
-    opacitySlider.addEventListener('input', function () {
-      currentOpacity = opacitySlider.value / 100; // Met à jour la variable currentOpacity
-      
-      // Si l'overlay climatique est présent, ajuster son opacité
-      if (climateOverlay) {
-        climateOverlay.setOpacity(currentOpacity);
-      }
+*/
 
-      // Si l'overlay de comparaison est présent, ajuster son opacité
-      if (comparisonOverlay) {
-        comparisonOverlay.setOpacity(currentOpacity);
-      }
-    });
-
-    return container;
-  };
-
-  // Ajouter le contrôle d'opacité à la carte
-  opacityControl.addTo(map);
-
-  // Exemple d'ajout des couches pour tester
-  climateOverlay = L.imageOverlay('path/to/climate-image.png', [[51.49, -0.08], [51.5, -0.06]], { opacity: currentOpacity });
-  comparisonOverlay = L.imageOverlay('path/to/comparison-image.png', [[51.49, -0.08], [51.5, -0.06]], { opacity: currentOpacity });
-
-  // Ajouter les couches à la carte
-  climateOverlay.addTo(map);
-  comparisonOverlay.addTo(map); */
 
 });//ceci est la fin de addeventlistener.
