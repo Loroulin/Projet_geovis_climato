@@ -119,29 +119,40 @@ document.addEventListener('DOMContentLoaded', function () {
     afficherSelectionOrigin();
   }
 
-  ////////////////////////////////////////////////////////////
-  // CREE LES TOGGLE POUR LA SELECTION DE COMPARAISON
-  //////////////////////////////////////////////////////////
+  ///////////////////////////////////////////////////////////
+  // CREE LES TOGGLE POUR LA SELECTION DE COMPARAISON & le slider
+  ///////////////////////////////////////////////////////////
+  const dragLine = document.querySelector(".slider .drag-line");
+  const sliderIcon = document.querySelector(".slider .slider-icon");
+
   function toggleComparisonMenu() {
     const comparisonCheckbox = document.getElementById('comparison-checkbox');
-      console.log('État de la case à cocher dans toggleComparisonMenu :', comparisonCheckbox.checked);
+    console.log('Éat de la case à cocher dans toggleComparisonMenu :', comparisonCheckbox.checked);
+
     const comparisonElements = [
       document.getElementById('comparison-climatic-factor'),
       document.getElementById('comparison-year'),
       document.getElementById('comparison-month'),
       document.getElementById('comparison-scenario')
     ];
-    
-    // Si la case est cochée, afficher les éléments de comparaison
+
+    // Si la case est cochée, afficher les éléments de comparaison et le slider
     if (comparisonCheckbox.checked) {
       comparisonElements.forEach(element => {
         element.style.display = 'block';
       });
+      document.querySelector(".slider").style.display = "block";  // Afficher le slider
+      dragLine.style.display = 'block';  // Afficher le dragLine
+      sliderIcon.style.display = 'block';  // Afficher le sliderIcon
       toggleScenarioSelection(); // Appliquer les règles pour l'année sélectionnée
     } else {
+      // Sinon, cacher les éléments de comparaison et le slider
       comparisonElements.forEach(element => {
         element.style.display = 'none';
       });
+      document.querySelector(".slider").style.display = "none";  // Masquer le slider
+      dragLine.style.display = 'none';  // Masquer le dragLine
+      sliderIcon.style.display = 'none';  // Masquer le sliderIcon
     }
   }
 
@@ -186,7 +197,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
   // Initialisation pour s'assurer que l'état correct est appliqué au chargement de la page
   toggleScenarioSelection();
-
 
   ////////////////////////////////////////////////////////////
   // AFFICHER LES IMAGES D'ORIGINES
@@ -298,7 +308,6 @@ document.addEventListener('DOMContentLoaded', function () {
       if (!imageNomComparison.endsWith('.png')) {
           imageNomComparison += '.png';
       }
-
       console.log("Nom de l'image de comparaison :", imageNomComparison);
 
       // Charger l'image
@@ -320,28 +329,29 @@ document.addEventListener('DOMContentLoaded', function () {
       };
   }
 
-
   // Ajouter les écouteurs d'événements
   document.getElementById('comparison-data-selection').addEventListener('change', afficherComparaison);
   document.getElementById('comparison-year-selection').addEventListener('change', afficherComparaison);
   document.getElementById('comparison-scenario-selection').addEventListener('change', afficherComparaison);
+  document.getElementById("comparison-month-selection").addEventListener("change", afficherComparaison); // Appelle `afficherSelectionOrigin` pour le mois
 
   ///////////////////////////////////////////////////////////
   // CREATION DU SLIDER
   /////////////////////////////////////////////////////////
   const slider = document.querySelector(".slider input");
-  const dragLine = document.querySelector(".slider .drag-line");
-  const sliderIcon = document.querySelector(".slider .slider-icon");
   const imageComparison = document.getElementById('image-comparison');
 
   ///////////////////////////////////////////////////////////
   // LIER LE SLIDER INPUT AU -WEBKIT-SLIDER-THUMB
   /////////////////////////////////////////////////////////
   slider.oninput = () => {
-    let sliderVal = slider.value;
-    dragLine.style.left = sliderVal + "%";  // Mise à jour du dragLine
-    sliderIcon.style.left = sliderVal + "%";  // Mise à jour de l'icône du slider
+      let sliderVal = slider.value;  // Valeur actuelle du slider
+
+      // Ajuster la position du dragline
+      dragLine.style.left = sliderVal + "%";
+      sliderIcon.style.left = sliderVal + "%";
   };
+
   ///////////////////////////////////////////////////////////
   // Interactivité avec le slider
   /////////////////////////////////////////////////////////
@@ -354,39 +364,100 @@ document.addEventListener('DOMContentLoaded', function () {
       imageComparison.style.clipPath = `inset(0 0 0 ${newClipValue}%)`;
   });
 
-  ///////////////////////////////////////////////////////////
-  // GESTION DE L'APPARITION DU SLIDER UNIQUEMENT LORS DE LA COMPARAISON
-  /////////////////////////////////////////////////////////
+  ////////////////////////////////////////////////////////////
+  // AJOUTER L'INTERACTIVITÉ DE LA LÉGENDE
+  ////////////////////////////////////////////////////////////
+  // Sélectionner les éléments
+  const dataSelection = document.getElementById('data-selection');
+  const comparisonSelection = document.getElementById('comparison-data-selection');
+  const precipitationLegend = document.getElementById('precipitation-legend');
+  const temperatureLegend = document.getElementById('temperature-legend');
   const comparisonCheckbox = document.getElementById('comparison-checkbox');
+  const legendDiv = document.getElementById('legend');
 
-  // Ajouter un écouteur d'événement pour la case à cocher
-  // Lorsque la case est cochée, afficher le slider
-  comparisonCheckbox.addEventListener('change', function() {
-    if (comparisonCheckbox.checked) {
-      // Si la case est cochée, afficher le slider
-      slider.style.display = 'block';  // Correction ici
-      dragLine.style.display = 'block';
-      sliderIcon.style.display = 'block';
-      console.log("Slider affiché");
-    } else {
-      // Si la case n'est pas cochée, masquer le slider
-      slider.style.display = 'none';
-      dragLine.style.display = 'none';
-      sliderIcon.style.display = 'none';
-      console.log("Slider masqué");
-    }
+  // Variables pour suivre les sélections principales et de comparaison
+  let selectedValue = ''; // Valeur de la sélection principale (precipitation ou temperature)
+  let selectedComparisonValue = ''; // Valeur de la sélection de comparaison (précipitation ou température)
+  let lastUsedLegend = 'null'; // Stockera la dernière légende affichée : 'precipitation' ou 'temperature' --> pour ne pas avoir double légende dès le checkbox checked. 
+
+  // Ajouter un écouteur d'événement pour capturer la sélection principale
+  dataSelection.addEventListener('change', function() {
+    selectedValue = dataSelection.value;
+    console.log("Selected Value:", selectedValue);  // Pour vérifier dans la console
+    updateLegend();  // Met à jour la légende après chaque changement de sélection
   });
 
+  // Ajouter un écouteur d'événement pour capturer la sélection de comparaison
+  comparisonSelection.addEventListener('change', function() {
+    selectedComparisonValue = comparisonSelection.value;
+    console.log("Selected Comparison Value:", selectedComparisonValue);  // Pour vérifier dans la console
+    updateLegend();  // Met à jour la légende après chaque changement de sélection
+  });
+  //Ecourteur d'évènement
+  comparisonCheckbox.addEventListener('change', function () {
+  updateLegend(); // Met à jour la légende lors du changement d'état de la case à cocher
+  });
 
+// Fonction updateLegend qui utilise selectedComparisonValue
+function updateLegend() {
+  // Aucune sélection effectuée
+  if (!selectedValue && !selectedComparisonValue && !comparisonCheckbox.checked) {
+    legendDiv.innerHTML = '<p>Aucune donnée sélectionnée. Veuillez choisir une option.</p>';
+    console.log("Aucune donnée sélectionnée.");
+    return;
+  }
+  // Si aucune des conditions ci-dessus n'est remplie, afficher les données non reconnues
+  if (!selectedValue || !selectedComparisonValue) {
+    legendDiv.innerHTML = '<p>Données non reconnues. Veuillez vérifier votre sélection.</p>';
+    console.log("Données non reconnues.");
+  }
 
-
- // Écouter les changements de la position du slider
-    slider.addEventListener("input", () => {
-        const value = slider.value; // Valeur du slider (0 à 100)
-        dragLine.style.left = `${value}%`; // Déplacer la ligne de séparation
-        comparisonOverlay.style.clipPath = `inset(0 ${100 - value}% 0 0)`; // Ajuster le découpage
-    });
-
-
+  // Si le checkbox de comparaison n'est pas activé
+  if (!comparisonCheckbox.checked) {
+    console.log("Selected Data:", selectedValue);  // Vérifie la sélection des données
+    if (selectedValue === 'precipitation') {
+      legendDiv.innerHTML = `
+        <h3>Évaluation des Précipitations</h3>
+        <p>Les scénarios climatiques CH2018 fournissent des projections sur les précipitations sur une période de 30 ans, basées sur trois scénarios : RCP 2.6, RCP 4.5 et RCP 8.5 (Rapport technique CH2018, 2018). Chacun de ces scénarios illustre les évolutions potentielles des précipitations en fonction des gaz à effet de serre émis actuellement et dans le futur, ainsi que des différentes mesures climatiques qui pourraient être mises en œuvre (GIEC, 2023). Présentées mensuellement, ces données intègrent des incertitudes, permettant ainsi une analyse approfondie des impacts climatiques.</p>
+        <img src="../readme_pictures/legende_precipitation.png" alt="Légende de précipitation" style="width:70%;">
+      `;
+      console.log("Affichage légende précipitations");
+    } else if (selectedValue === 'temperature') {
+      legendDiv.innerHTML = `
+        <h3>Évaluation des Températures</h3>
+        <p>Les scénarios climatiques CH2018 fournissent des projections sur les températures sur une période de 30 ans, basées sur trois scénarios : RCP 2.6, RCP 4.5 et RCP 8.5 (Rapport technique CH2018, 2018). Chacun de ces scénarios illustre les évolutions potentielles des températures en fonction des gaz à effet de serre émis actuellement et dans le futur, ainsi que des différentes mesures climatiques qui pourraient être mises en œuvre (GIEC, 2023). Présentées mensuellement, ces données intègrent des incertitudes, permettant ainsi une analyse approfondie des impacts climatiques.</p>
+        <img src="../readme_pictures/legende_temperature.png" alt="Légende de température" style="width:70%;">
+      `;
+      console.log("Affichage légende températures");
+    }
+  } else if (comparisonCheckbox.checked) {
+    console.log("Checkbox activée. Comparaison des deux valeurs...");
+    // Si le checkbox est activé, comparer les deux valeurs
+    if (selectedValue === 'precipitation' && selectedComparisonValue === 'comparison-precipitation') {
+      console.log("Les deux sélections sont 'precipitation'. Affichage de la légende des précipitations uniquement.");
+      legendDiv.innerHTML = `
+        <h3>Évaluation des Précipitations - Comparaison de données</h3>
+        <p>Les scénarios climatiques CH2018 fournissent des projections sur les précipitations sur une période de 30 ans, basées sur trois scénarios : RCP 2.6, RCP 4.5 et RCP 8.5 (Rapport technique CH2018, 2018). Chacun de ces scénarios illustre les évolutions potentielles des précipitations en fonction des gaz à effet de serre émis actuellement et dans le futur, ainsi que des différentes mesures climatiques qui pourraient être mises en œuvre (GIEC, 2023). Présentées mensuellement, ces données intègrent des incertitudes, permettant ainsi une analyse approfondie des impacts climatiques.</p>
+        <img src="../readme_pictures/legende_precipitation.png" alt="Légende de précipitation" style="width:70%;">
+      `;
+    } else if (selectedValue === 'temperature' && selectedComparisonValue === 'comparison-temperature') {
+      console.log("Les deux sélections sont 'temperature'. Affichage de la légende des températures uniquement.");
+      legendDiv.innerHTML = `
+        <h3>Évaluation des Températures</h3>
+        <p>Les scénarios climatiques CH2018 fournissent des projections sur les températures sur une période de 30 ans, basées sur trois scénarios : RCP 2.6, RCP 4.5 et RCP 8.5 (Rapport technique CH2018, 2018). Chacun de ces scénarios illustre les évolutions potentielles des températures en fonction des gaz à effet de serre émis actuellement et dans le futur, ainsi que des différentes mesures climatiques qui pourraient être mises en œuvre (GIEC, 2023). Présentées mensuellement, ces données intègrent des incertitudes, permettant ainsi une analyse approfondie des impacts climatiques.</p>
+        <img src="../readme_pictures/legende_temperature.png" alt="Légende de température" style="width:70%;">
+      `;
+    } else {
+      console.log("Les sélections sont différentes ou non définies. Affichage des deux légendes.");
+      console.log("selectedValue:", selectedValue, "| selectedComparisonValue:", selectedComparisonValue);
+      // Afficher les deux légendes si les deux sont sélectionnées mais ne correspondent pas
+      legendDiv.innerHTML = `
+        <h3>Évaluation des Températures et Précipitations</h3>
+        <img src="../readme_pictures/legende_temperature.png" alt="Légende de température" style="width:50%;">
+        <img src="../readme_pictures/legende_precipitation.png" alt="Légende de précipitation" style="width:50%;">
+      `;
+    }
+  }
+  };
 
 });//ceci est la fin de addeventlistener.

@@ -58,6 +58,7 @@ p {
 
 /*///le style des différents div///*/
 .container {
+    position: relative;
     display: flex;
     height: calc(100vh - 120px); /* Hauteur du conteneur */
     width: calc(100% - 10px);
@@ -133,6 +134,55 @@ select:disabled {
 }
 
 
+/*le contrôle du zoom*/
+.zoom-control {
+    display: flex;
+    flex-direction: column; /* Empile les boutons verticalement */
+    position: absolute;
+    bottom: 30px;
+    right: 10px;
+    z-index: 50; /* S'assure qu'il est au-dessus de tout autre contenu */
+}
+/*les boutons de zoom*/
+.zoom-in-button,
+.zoom-out-button {
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin: 2.5px 0;
+    cursor: pointer; /* Change le curseur sur hover */
+    width: 30px;
+    height: 30px;
+    font-size: 18px;
+}
+/*change la couleur lors du passage de la souris*/
+.zoom-in-button:hover, .zoom-out-button:hover {
+    background-color: #f0f0f0; /* Légère variation de couleur au survol */
+    transform: scale(1.1); /* Effet de zoom */
+    transition: all 0.2s ease;
+}
+
+/*l'attribution leaflet*/
+.leaflet-control-attribution {
+    position: absolute;
+    bottom: 10px;  /* Garder l'espacement depuis le bas */
+    left: 10px;   /* Positionner à droite */
+    z-index: 100;
+    background-color: rgba(255, 255, 255, 0.9);
+    padding: 5px;
+    border-radius: 5px;
+    font-size: 8px !important;
+    width: 150px;  /* Ajustez la largeur si nécessaire */
+}
+
+/*placement de l'échelle*/
+.leaflet-control-scale {
+    position: absolute;
+    bottom: 10px;  /* Décaler l'échelle vers le haut */
+    right: 10px;
+    z-index: 100;
+}
+
 
 /* les différentes images */
 .wrapper {
@@ -150,6 +200,8 @@ select:disabled {
     top: 0;
     left: 0; 
 }
+
+
 /* Image de gauche (entièrement visible) */
 #image-origin {
     position: absolute; /* Pour superposer l'image de gauche */
@@ -160,17 +212,15 @@ select:disabled {
 
 /* Image de droite, initialement coupée */
 #image-comparison {
-    position: absolute;
+    position: relative;
     top: 50%; /* Centré verticalement */
     left: 50%; /* Centré horizontalement */
+    max-height: 50%;
     transform: translate(-50%, -50%); /* Centre l'image */
-    width: 130%; /* Ajuste automatiquement la largeur */
-    height: 130%; /* Ajuste automatiquement la hauteur */
     object-fit: contain; /* Conserve les proportions de l'image */
-    clip-path: inset(0 50% 0 0); /* Ajuste la découpe initiale */
+    clip-path: inset(0 0 0 50%); /* Ajuste la découpe initiale */
     transition: clip-path 0.1s ease;
 }
-
 
 
 /* Conteneur principal du slider */
@@ -181,7 +231,18 @@ select:disabled {
     z-index: 10;
     width: 100%;   /* Largeur à 100% pour prendre toute la largeur de .main */
     height: calc(100vh - 120px); /* Hauteur ajustée du slider */
-    /*display: none  ;*/
+    display: none  ;
+}
+
+
+/* Conteneur principal du slider */
+.slider {
+    position: absolute;
+    top: 0px; /* Le slider commence au sommet du conteneur */
+    left: 0;
+    z-index: 10;
+    width: 100%;   /* Largeur à 100% pour prendre toute la largeur de .main */
+    height: calc(100vh - 120px); /* Hauteur ajustée du slider */
 }
 
 
@@ -213,9 +274,9 @@ select:disabled {
     position: relative;
     border: 2px solid transparent;
     -webkit-appearance: none;
-    height: calc(100vh - 120px);
-    top: -2px;
-    width: 50px;
+    height: 100vh;
+    top: 0px;
+    width: 20px;
     cursor: col-resize;
 }
 
@@ -226,7 +287,6 @@ select:disabled {
     left: 50%;
     width: 5px;
     height: 100%;
-    transform: translateX(-50%);
     background-color: #000;
     opacity: 0.5;
 }
@@ -246,36 +306,6 @@ select:disabled {
 }
 
 
-
-
-/*  */
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 /* //////////////////////////////////////////////////////////////////////////////////////// */
 .right {
     flex: 0 0 20%;
@@ -284,6 +314,61 @@ select:disabled {
     padding: 10px;
     background-color:#dcdcdc ;
 }
+
+
+
+
+
+
+/* Texte de la légende */
+.legend-text p {
+    font-size: 14px;
+    color: #333;
+    margin-bottom: 10px;
+    max-height: 150px; /* Hauteur maximale pour le texte */
+    overflow-y: auto; /* Défilement vertical si nécessaire */
+    background-color: #f9f9f9; /* Couleur de fond */
+    padding: 10px; /* Espacement intérieur */
+    box-sizing: border-box; /* Inclut padding dans la hauteur */
+    border-radius: 5px; /* Bordures arrondies */
+    border: 1px solid #ccc; /* Bordure discrète */
+}
+
+/* Scrollbar stylisée pour la légende de texte */
+.legend-text::-webkit-scrollbar {
+    width: 8px;
+}
+.legend-text::-webkit-scrollbar-thumb {
+    background-color: rgba(0, 0, 0, 0.4);
+    border-radius: 3px;
+}
+.legend-text::-webkit-scrollbar-track {
+    background-color: rgba(0, 0, 0, 0.2);
+    border-radius: 3px;
+}
+
+/* Image de la légende */
+.legend-image {
+    display: flex; /* Centre le contenu */
+    justify-content: center;
+    align-items: center;
+    width: 100%; /* Prend toute la largeur du conteneur */
+    max-height: 250px; /* Limite la hauteur de l'image */
+    overflow: hidden; /* Cache les parties de l'image qui dépassent */
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-radius: 5px; /* Bordures arrondies */
+}
+
+/* Ajuster l'image à l'intérieur de la légende */
+.legend-image img {
+    max-height: 100px; /* Hauteur maximale */
+    height: auto; /* Conserve le ratio d'aspect */
+    object-fit: contain; /* Ajuste sans déformer */
+}
+
+
+
 
 
 /* Footer */
