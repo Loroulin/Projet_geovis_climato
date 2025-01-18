@@ -13,10 +13,10 @@ Avec cette idée de base en tête, nous allons créer une carte interactive sur 
 Pour concevoir ce travail, nous nous sommes inspirées des cartes de températures et de précipitations réalisées dans l'Atlas hydrologique de la Suisse. Ces cartes interactives présentent l'évolution des températures et des précipitations selon les scénarios CH2018.
 
 ## Exemple de carte des précipitations 
-![Carte des précipitations futures](precipitations.png)
+![Carte des précipitations futures](readme_pictures/precipitations.png)
 
 ## Exemple de carte des températures 
-![Carte des températures futures](temperatures.png)
+![Carte des températures futures](readme_pictures/temperatures.png)
 
 # Données utilisées 
 Il n’a pas été facile de trouver des données correspondant aux besoins de notre travail. Nous avons donc exploré différentes sources avant de trouver celles finalement utilisées ici.
@@ -43,7 +43,7 @@ Les températures moyennes de l'air à 2 m sont issues d'un ensemble de données
 Tout d'abord, nous avons pris le temps de faire un croquis pour visualiser la carte souhaitée pour ce projet, ce qui nous a aidés à mieux nous projeter et à estimer le travail nécessaire pour la créer. Cela nous a également permis de déterminer par où commencer pour réaliser la carte. Par la réalisation de ce croquis, nuus avons également réalisé que nous avions vu un peu grand pour commencer, et que certaines choses prévues initialement n'ont pas pu être réalisées par manque de temps.
 
 La carte interactive finale sera probablement présentée sous cette forme :
-![Prémisses de la carte ](carte_idee_geovisu2.jpg)
+![Prémisses de la carte ](readme_pictures/carte_idee_geovisu2.jpg)
 
 ## Eléments de la carte
 Sur la gauche de la carte, nous retrouverons les informations fixes ; au centre se trouvera la carte et, à droite, les informations qui varient en fonction des sélections faites dans le menu de gauche.
@@ -82,31 +82,17 @@ Pour commencer, un document HTML a été créé et est composé de plusieurs él
 
 Chaque élément fonctionne comme un tiroir qui peut contenir d'autres éléments. Pour ajouter un élément, vous devez l'ouvrir en utilisant des chevrons autour de son nom, comme ceci : <...>. Pour fermer cet élément, vous devez ajouter un / à l'intérieur des chevrons, comme ceci : </...>. Cette logique est utilisée pour chaque élément de l'HTML.
 
-![Elements de base d'un HTLM](readme_pictures/structure_html_base.png)
-
 Par exemple : l'élément HTML principal s'ouvre avec  `<html>` et se ferme avec `</html>`. À l'intérieur de la balise html, vous pouvez avoir un `<head>` pour les métadonnées et un `<body>` pour le contenu visible de la page, chacun ayant sa propre balise d'ouverture et de fermeture.
 
-## 1.1 Les métadonnées
-
-Pour commencer, certaines métadonnées peuvent déjà être écrites. Il s'agit ici de 
-`<meta charset="UTF-8" />` qui est un système d'encodage, ainsi que `<meta name="viewport" content="width=device-width, initial-scale=1.0">` qui permet de rendre la page réactive sur différents mobiles (mais celle-ci n'est pas obligatoire). 
-
-## 1.2 Le contenu de la page web
+## 1.1 Le contenu de la page web
 Pour notre carte, nous voulons créer trois parties principales. La première étape est alors de diviser l'écran en différentes parties en utilisant des div. Une div est donc un élément HTML utilisé pour créer des sections sur une page web et ainsi structurer notre code et notre page. Il est aussi possible de mettre des titres et des sous-titres aux différents éléments. `<h1>...</h1>` correspond au titre un, `<h2>...</h2>` au titre deux et ainsi de suite. 
 
 Ainsi, pour créer notre carte, nous avons besoin de deux balises `<div>`. Le premier `<div>` contiendra les menus de sélection, la carte et les informations, et le second `<div>` sera réservé aux sources. Le premier `<div>` est appelé "container", car il sert de réceptacle pour la majorité du contenu de notre site. Le second `<div>`, nommé "footer", contiendra les différentes sources d'information.
 
 Ensuite, nous avons continué de subdiviser notre `<div>` "container" en trois parties: "left", "map" et "right" afin d'organiser l'espace. Chaque `<div>` utilise une "class" et un "id". La "class" permet d'appliquer des styles communs à plusieurs éléments, tandis que l'"id" est unique et sert à cibler un élément précis pour des modifications spécifiques.
 
-![div de base](readme_pictures/structure_html_div.png)
-
 # 2. Le CSS
-## 2.1 Lier le CSS au HTML
-Jusqu'à maintenant, nous avons la base de notre site, mais seuls les titres sont visibles sur notre page web. Pour mettre en forme les différents `<div>`, nous allons lier notre HTML à une feuille de style de leaflet `<link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />`. Puis nous ajoutons également le lien de notre feuille de style personnalisée qui est appelée "style.css". Pour ce faire, nous ajoutons la ligne `<link rel="stylesheet" href="style.css" />` dans le `<head>` de notre HTML.
-
-## 2.2 Modifier le style des différents éléments
-A ce niveau, et comme nous l'avons déjà dit, seulement les titres apparaissent sur notre page web. Nous allons donc maintenant modifier le visuel. Nous pouvons alors modifier les titres, les `<div>` en entier ou bien un seul élément à la fois. 
-
+## 2.1 Modifier le style des différents éléments
 Il existe trois manières principales de sélectionner les éléments à styliser dans notre CSS.
 
 1. Sélectionner un élément HTML : Pour cibler des balises HTML spécifiques, comme le corps du texte (body), il suffit de nommer la balise directement dans le CSS. Par exemple, pour styliser le corps du texte, on écrit simplement body suivi d'accolades.
@@ -130,7 +116,6 @@ body {
 }
 ```
 
-
 Dans les accolades, nous inscrivons les règles de style que nous voulons appliquer à l'élément sélectionné. Chaque ligne dans les accolades définit une propriété de style et sa valeur. Chaque propriété suit ce format : propriété: valeur. Voici quelques-unes des principales propriétés que vous pouvez utiliser :
 
 ```css
@@ -144,19 +129,19 @@ Dans les accolades, nous inscrivons les règles de style que nous voulons appliq
   display: flex : Transforme l'élément en conteneur flexible, facilitant la disposition de ses enfants.
   flex-direction: column : Dispose les enfants de l'élément en une colonne verticale.
 ```
-## 2.3 Modifier les tailles des éléments du "container"
+## 2.2 Modifier les tailles des éléments du "container"
 Une fois les titres et le corps de texte stylisés, nous pouvons nous attaquer au style de notre "container". Comme indiqué dans notre HTML, le "container" contient trois sections auxquelles nous allons attribuer des tailles et des styles distincts. Nous allons donc styliser la classe .container ainsi que les classes qui la composent : .left, .main, et .right. Cela nous permettra d'organiser visuellement l'espace en définissant des proportions et des styles spécifiques pour chaque section.
 
 Les différentes règles de style mentionnées précédemment peuvent être réutilisées ici. Pour éviter toute redondance, nous n'allons pas les expliquer à nouveau, mais vous pouvez vous référer à la section 2.2 pour affiner le visuel selon vos préférences.
 
-### 2.3.1 Gestion de la taille des différents `<div> `
+### 2.2.1 Gestion de la taille des différents `<div> `
 Nous allons maintenant nous concentrer sur la gestion de la taille des différents  `<div> `, en utilisant principalement trois règles de style :
 
 width : définit la largeur du conteneur.
 height : définit la hauteur du conteneur.
-flex : spécifie les propriétés flexibles de l'élément lorsqu'il est utilisé dans un conteneur avec la propriété display: flex (décrit en section 2.2).
+flex : spécifie les propriétés flexibles de l'élément lorsqu'il est utilisé dans un conteneur avec la propriété display: flex (décrit en section 2.1).
 
-### 2.3.2 Stylisation du "container"
+### 2.2.2 Stylisation du "container"
 Commençons par le conteneur principal. Nous souhaitons qu'il occupe toute la largeur de l'écran tout en ayant une hauteur maximale. Les règles de style pour cela sont les suivantes :
 
  ```css
@@ -168,7 +153,7 @@ Commençons par le conteneur principal. Nous souhaitons qu'il occupe toute la la
 
 Ainsi, le  `<div> ` occupera 100% de la largeur de l'écran et une bonne partie de la hauteur. La hauteur est calculée à l'aide de la fonction calc(), qui permet d'ajuster dynamiquement la taille. Dans cet exemple, nous utilisons 100vh (100% de la hauteur de la fenêtre) et nous soustrayons N pixels pour tenir compte des titres, marges et autres éléments présents sur la page. Ceci peut aussi être fait avec nos autres  `<div> ` tel que le footer.
 
-### 2.3.3 Stylisation des éléments enfants (.left, .main, .right)
+### 2.2.3 Stylisation des éléments enfants (.left, .main, .right)
 Une fois le conteneur défini, nous pouvons nous concentrer sur les  `<div> ` enfants : .left, .main, et .right. Étant donné que la taille du conteneur est déjà spécifiée, il ne reste qu'à définir la taille des  `<div> ` enfants en utilisant la propriété flex.
 
 Par exemple pour .left:
@@ -184,7 +169,7 @@ Par exemple pour .left:
 
 Pour les blocs .left et .right, nous avons flex: 2 1 n%, ce qui signifie qu'ils commencent à une taille de n% du conteneur et peuvent s'agrandir ou se rétrécir selon l'espace disponible. L'élément central .main, plus grand, utilise flex: 1 1 65%, ce qui lui permet de commencer à 65% du conteneur et de s'ajuster de manière égale aux autres éléments.
 
-### 2.3.4 Astuce : Visualisation des  `<div> `
+### 2.2.4 Astuce : Visualisation des  `<div> `
 Pour mieux visualiser l’organisation des différentes sections, vous pouvez leur appliquer des couleurs de fond temporaires via la propriété background-color. Cela vous aidera à ajuster plus facilement les tailles et les proportions des éléments.
 
 A ce stade, votre page ressemble à ceci: 
@@ -193,8 +178,6 @@ A ce stade, votre page ressemble à ceci:
 
 # 3. Le JS
 ## 3.1 Lier le JS au HTML
-De la même manière que pour le CSS, nous devons lier notre script Javascript (JS) avec notre HTML afin de pouvoir ajouter de l'interactivité à notre carte. Nous allons en premier ajouter  `<script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script> ` dans notre  `<head> ` afin de faire le lien vers un JS puis nous ajoutons le lien vers notre feuille JS personnalisée grâce à  `<script src="index.js"></script> `. 
-
 Le début du script commencera alors avec: 
 
  ```javascript
@@ -267,56 +250,27 @@ Ce code ajoute une interface de contrôle qui permet de basculer entre les diff�
 Pour améliorer l'interaction avec notre carte, nous allons ajouter deux boutons en bas à droite : un pour zoomer et un autre pour dézoomer. Voici comment procéder :
 
 ### 3.3.1 Créer d'un contrôle de zoom
-Nous commençons par créer une variable pour le contrôle de zoom, en le positionnant en bas à droite de la carte : 
+Nous commençons par créer une variable pour le contrôle de zoom, en le positionnant en bas à droite de la carte. Il y a deux styles de fonction, l'une qui permet de zoomer et l'autre de dézoomer en fonction du bouton utilisé. 
 
 ```javascript
   var zoomControl = L.control({ position: 'bottomright' });
-```
 
-### 3.3.2 Définir de la fonction onAdd
-Ensuite, nous définissons la fonction onAdd, qui est responsable de l'ajout des boutons à la carte :
-
-```javascript
   zoomControl.onAdd = function() {
-```
-
-### 3.3.3 Créer du conteneur
-À l'intérieur de cette fonction, nous créons un conteneur `<div>` qui accueillera nos boutons de zoom : 
-
-```javascript
-  var container = L.DomUtil.create('div', 'zoom-control');
-```
-
-### 3.3.4 Créer les boutons
-Nous allons maintenant créer deux boutons : l'un pour zoomer et l'autre pour dézoomer. Pour chacun d'eux, nous définissons l'action à effectuer lors d'un clic.
-
-Bouton de zoom avant :
-
-```javascript
-  var zoomInButton = L.DomUtil.create('button', 'zoom-in-button', container);
-  zoomInButton.innerHTML = '+'; // Définit le texte du bouton
-  zoomInButton.onclick = function() {
-  map.zoomIn(); // Zoom avant sur la carte
-  };
-```
-
-Bouton de zoom arrière :
-
-```javascript
-  var zoomOutButton = L.DomUtil.create('button', 'zoom-out-button', container);
-  zoomOutButton.innerHTML = '-'; // Définit le texte du bouton
-  zoomOutButton.onclick = function() {
-  map.zoomOut(); // Zoom arrière sur la carte
-  };
-```
-
-Une fois les boutons créés, nous retournons le conteneur afin qu'il soit ajouté à la carte, puis nous y ajoutons le contrôle du zoom : 
-
-```javascript
-  return container;
+    var container = L.DomUtil.create('div', 'zoom-control');
+    var zoomInButton = L.DomUtil.create('button', 'zoom-in-button', container);
+    zoomInButton.innerHTML = '+';
+    zoomInButton.onclick = function() {
+      map.zoomIn();
+    };
+    var zoomOutButton = L.DomUtil.create('button', 'zoom-out-button', container);
+    zoomOutButton.innerHTML = '-';
+    zoomOutButton.onclick = function() {
+      map.zoomOut();
+    };
+    return container;
   };
 
-  zoomControl.addTo(map);
+  zoomControl.addTo(map); 
 ```
 
 # 4. Créer des menus déroulants
@@ -378,52 +332,204 @@ Notre HTML devrait alors ressembler à ceci:
     </div>
 ```
 
-Ces différents éléments peuvent également être modifiés dans le CSS pour un style visuellement plus agréable. Cependant, nous n'allons pas y revenir, car la méthode est identique à celle présentée plus haut.
+Ces différents éléments peuvent également être modifiés dans le CSS pour un style visuellement plus agréable. Cependant, nous n'allons pas y revenir, car la méthode est identique à celle présentée plus haut. La même logique est ensuite utilisée pour les sélections des années, du mois et des scénarios climatiques. 
 
-## 4.3 Ajouter des légendes
-La principale différence au niveau des filtres réside dans le choix des facteurs climatiques. Pour spécifier les différentes légendes et informations, nous souhaitons que, lors de la sélection du premier filtre, c'est-à-dire 'climatic-factors', la légende correspondante apparaisse dans la partie droite ("right"). 
+## 4.3 Bloquer le choix les scénarios
+Ces fonctions permettent de bloquer le choix des scénarios futurs lorsque les années actuelles sont sélectionnées. La fonction 'gererSelectionAnnee()' permet de bloquer le choix des scénarios de l'image de base et la fonction 'toggleScenarioSelection()' permet de bloquer ceux de l'image de comparaison. 
 
-Plusieurs étapes sont nécessaires pour cela.
+```js
+function gererSelectionAnnee(){
+    const anneeSelectionnee = document.getElementById("year-selection").value;
+    const scenarioMenu = document.getElementById("scenario-selection");
 
-### 4.3.1 Récupérer des éléments HTML
-Nous souhaitons sélectionner l'ID de nos 'climatic-factors', nommé 'data-selection'. La deuxième constante établit le lien avec l'emplacement de la page où la légende s'affichera.
+    if (anneeSelectionnee == "20-49"){
+      scenarioMenu.disabled = false;
+    } else{
+      scenarioMenu.disabled = true;
+      scenarioMenu.value = "";
+    }
+    afficherSelectionOrigin();
+  }
 
-```javascript
-  const dataSelection = document.getElementById('data-selection');
-  const legendDiv = document.getElementById('legend');
+function toggleScenarioSelection() {
+  const yearSelection = document.getElementById('comparison-year-selection');
+  const scenarioSelection = document.getElementById('comparison-scenario-selection');
+    
+  // Si "1991-2010" est sélectionné, vider le menu scénario et le désactiver
+  if (yearSelection.value === '91-10') {
+    scenarioSelection.innerHTML = ""; // Vider les options
+    scenarioSelection.disabled = true; // Désactiver le menu scénario
+  } else {
+    // Sinon, réactiver le menu scénario et ajouter les options possibles
+    scenarioSelection.disabled = false;
+    // Ajout des options du scénario (à adapter selon tes besoins)
+    const options = [
+      { value: "rcp2.6", text: "RCP 2.6" },
+      { value: "rcp4.5", text: "RCP 4.5" },
+      { value: "rcp8.5", text: "RCP 8.5" },
+    ];
+      
+    // Remplir le menu scénario si ce n'est pas déjà fait
+    if (scenarioSelection.options.length === 0) {
+      options.forEach(option => {
+        const opt = document.createElement("option");
+        opt.value = option.value;
+        opt.text = option.text;
+        scenarioSelection.add(opt);
+      });
+    }
+  }
+}
 ```
 
-### 4.3.2 Définir de la fonction 
+## 4.4 Créer les toggle pour la sélection de comparaison
+Expliquer 
+comparer = scénarios et la barre de comparaison qui apparait 
 
-```javascript
-  function updateLegend() {
-    const selectedValue = dataSelection.value;
-    legendDiv.innerHTML = '';
+```js
+  const dragLine = document.querySelector(".slider .drag-line");
+  const sliderIcon = document.querySelector(".slider .slider-icon");
+
+  function toggleComparisonMenu() {
+    const comparisonCheckbox = document.getElementById('comparison-checkbox');
+    console.log('Éat de la case à cocher dans toggleComparisonMenu :', comparisonCheckbox.checked);
+
+    const comparisonElements = [
+      document.getElementById('comparison-climatic-factor'),
+      document.getElementById('comparison-year'),
+      document.getElementById('comparison-month'),
+      document.getElementById('comparison-scenario')
+    ];
+
+    // Si la case est cochée, afficher les éléments de comparaison et le slider
+    if (comparisonCheckbox.checked) {
+      comparisonElements.forEach(element => {
+        element.style.display = 'block';
+      });
+      document.querySelector(".slider").style.display = "block";  // Afficher le slider
+      dragLine.style.display = 'block';  // Afficher le dragLine
+      sliderIcon.style.display = 'block';  // Afficher le sliderIcon
+      toggleScenarioSelection(); // Appliquer les règles pour l'année sélectionnée
+    } else {
+      // Sinon, cacher les éléments de comparaison et le slider
+      comparisonElements.forEach(element => {
+        element.style.display = 'none';
+      });
+      document.querySelector(".slider").style.display = "none";  // Masquer le slider
+      dragLine.style.display = 'none';  // Masquer le dragLine
+      sliderIcon.style.display = 'none';  // Masquer le sliderIcon
+    }
+  }
+  ```
+
+# 5. Afficher les différentes images 
+Afficher les différentes images en fonction des sélectionnés. 
+Comment les images sont nommées : 'facteurClimatique' - 'année' - 'mois' - 'scénario'
+En fonction de l'année sélectionnée, il va chercher avec un code différent (scénario ou pas)
+Une fois qu'il a trouvé l'image correspondante, il va créer un nouvel URL pour afficher l'image sur la carte.
+Le noveau URL sera affiché sur la map et qu'à chaque changement d'un des éléments, la carte se met dynamiquement à jour avec un nouvel URL.
+La même technique est utilisée pour les images de comparaison. 
+
+```js
+// Créer le nom du fichier de l'image en fonction des sélections
+    let imageNom;
+    if (annee === "91-10") {
+      imageNom = `${facteurClimatique}_${annee}_${mois}.png`;
+    } else if (annee === "20-49") {
+      imageNom = `${facteurClimatique}_${annee}_${mois}_${scenario}.png`;
+    }
+
+    // Créer le chemin de l'image
+    const URLImage = `../cartes/${imageNom}`;
 ```
 
-### 4.3.3 Condition pour la mise à jour de la légende
-Puis nous créons une condition très simple. Si la précipitation est sélectionnée, alors le titre, le texte et l'image s'y rapportant apparaissent. Sinon, si c'est la température qui est sélectionnée, ce sont le titre, le texte et l'image des températures qui s'affichent.
+# 6. Interactivité avec le slider
+Fonctionne avec un css, la valeur du slider elle va dans les deux extrémités de notre map (droit à gauche). Ce qui est lié avec le css est le 'imageComparison.style.clipPath' et dit que l'image sur la gauche va être clipée avec le slider/curseur. 
 
-```javascript
+```js
+slider.addEventListener('input', (e) => {
+      const sliderValue = e.target.value;
+      const maxClipValue = 100; // Valeur maximum du clip (100%)
+      const newClipValue = Math.min(sliderValue, maxClipValue); // Assurez-vous qu'il ne dépasse pas 100%
+      
+      // Appliquez le clipPath pour masquer la partie gauche de l'image
+      imageComparison.style.clipPath = `inset(0 0 0 ${newClipValue}%)`;
+  }); 
+```
 
+# 7. Afficher les légendes
+! = si pas sélectionné = si rien sélectionné y'a rien qui s'affiche 
+
+```js
+// Fonction updateLegend qui utilise selectedComparisonValue
+function updateLegend() {
+  // Aucune sélection effectuée = rien qui s'affiche 
+  if (!selectedValue && !selectedComparisonValue && !comparisonCheckbox.checked) {
+    legendDiv.innerHTML = '<p>Aucune donnée sélectionnée. Veuillez choisir une option.</p>';
+    console.log("Aucune donnée sélectionnée.");
+    return;
+  }
+  // Si aucune des conditions ci-dessus n'est remplie, afficher les données non reconnues
+  if (!selectedValue || !selectedComparisonValue) {
+    legendDiv.innerHTML = '<p>Données non reconnues. Veuillez vérifier votre sélection.</p>';
+    console.log("Données non reconnues.");
+  }
+
+  // Si le checkbox de comparaison n'est pas activé
+  if (!comparisonCheckbox.checked) {
+    console.log("Selected Data:", selectedValue);  // Vérifie la sélection des données
+    // Sélection des précipitations = légende des précipitations
     if (selectedValue === 'precipitation') {
       legendDiv.innerHTML = `
-        <h3>Scénarios des précipitations jusqu'en 2050</h3>
-        <p>Texte pour précipitation.</p>
-        <img src="path/to/precipitation-image.jpg" alt="Légende de précipitation" style="width:100%;">
+        <h3>Évaluation des Précipitations</h3>
+        <p>texte de la légende</p>
+        <img src="../readme_pictures/legende_precipitation.png" alt="Légende de précipitation" style="width:70%;">
       `;
+      console.log("Affichage légende précipitations");
+      // Sélection des températures = légende des températures
     } else if (selectedValue === 'temperature') {
       legendDiv.innerHTML = `
-        <h3>Scénarios des températures jusqu'en 2050</h3>
-        <p>Texte pour température</p>
-        <img src="path/to/temperature-image.jpg" alt="Légende de température" style="width:100%;">
+        <h3>Évaluation des Températures</h3>
+        <p>texte de la légende</p>
+        <img src="../readme_pictures/legende_temperature.png" alt="Légende de température" style="width:70%;">
+      `;
+      console.log("Affichage légende températures");
+    }
+  } else if (comparisonCheckbox.checked) {
+    console.log("Checkbox activée. Comparaison des deux valeurs...");
+    // Si le checkbox de comparaison est activé, comparer les deux valeurs
+    // Sélection précipitations/précipitations
+    if (selectedValue === 'precipitation' && selectedComparisonValue === 'comparison-precipitation') {
+      console.log("Les deux sélections sont 'precipitation'. Affichage de la légende des précipitations uniquement.");
+      legendDiv.innerHTML = `
+        <h3>Évaluation des Précipitations - Comparaison de données</h3>
+        <p>texte de la légende</p>
+        <img src="../readme_pictures/legende_precipitation.png" alt="Légende de précipitation" style="width:70%;">
+      `;
+      // Sélection températures/températures
+    } else if (selectedValue === 'temperature' && selectedComparisonValue === 'comparison-temperature') {
+      console.log("Les deux sélections sont 'temperature'. Affichage de la légende des températures uniquement.");
+      legendDiv.innerHTML = `
+        <h3>Évaluation des Températures</h3>
+        <p>texte de la légende</p>
+        <img src="../readme_pictures/legende_temperature.png" alt="Légende de température" style="width:70%;">
+      `;
+    } else {
+      console.log("Les sélections sont différentes ou non définies. Affichage des deux légendes.");
+      console.log("selectedValue:", selectedValue, "| selectedComparisonValue:", selectedComparisonValue);
+      // Afficher les deux légendes si les deux sont sélectionnées mais ne correspondent pas
+      legendDiv.innerHTML = `
+        <h3>Évaluation des Températures et Précipitations</h3>
+        <img src="../readme_pictures/legende_temperature.png" alt="Légende de température" style="width:50%;">
+        <img src="../readme_pictures/legende_precipitation.png" alt="Légende de précipitation" style="width:50%;">
       `;
     }
+  }
+  };
 ```
 
-### 4.3.4 Événement de changement sur le menu déroulant et mises à jour
-Une fois qu'un autre facteur climatique est sélectionné, nous observons alors un changement de légendes. Cela se fait par :
-```javascript
-  dataSelection.addEventListener('change', updateLegend);
-  updateLegend(); // Mettre à jour la légende lors du chargement de la page
-```
+# 8. Remarques, limites et difficultés
+Curseur comparatif entre les cartes, depuis le curseur plus rien fonctionne. Toutes les fonctonnalités de la map qui disfonctionnent = le zoom, changement de fond de carte, 
+Image de comparaison a une projection et une emprise bizarre = mais les image sont les mêmes. 
+Image ne suit pas le curseur, se décale sur les extrémités, l'image ne suit pas exactement le curseur 
+Le scoller = fonctionne pas pour la légende 
