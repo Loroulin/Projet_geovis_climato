@@ -1,6 +1,7 @@
 # Description et réflexions sur le déroulement du projet
 Lorena Roulin et Marine Fiora
-Université de Lausanne, Mars 2024
+
+Université de Lausanne, mars 2024 - janvier 2025
 
 # Introduction
 Dans ce travail, nous prévoyons de réaliser une carte interactive qui présente l'évolution des précipitations et des températures en Suisse, selon la période actuelle et les différents scénarios du GIEC.
@@ -52,7 +53,7 @@ Sur la gauche de la carte, nous retrouverons les informations fixes ; au centre 
 
 1. Le thème de la carte : précipitations ou températures.
 2. L'année : de référence 1981-2010 ou projections pour les années 2020-2049. 
-3. Le mois : le mois de l'année peut être sélectionné 
+3. Le mois : le mois de l'année peut être sélectionné. 
 4. Le scénario du GIEC : RCP2.6, RCP4.5, RCP8.5. 
 
 Si l'utilisateur ne souhaite pas faire de projections futures, il peut sélectionner uniquement le thème de la carte, qui s'affichera alors avec la période de référence actuelle, soit 1981-2010. Pour obtenir des informations plus précises, il peut choisir d'activer les options 2, 3 et 4.
@@ -539,5 +540,7 @@ L'utilisation de Git a également posé plusieurs problèmes durant la réalisat
 Puis, plusieurs problèmes ont été rencontrés lors de l'utilisation du curseur comparatif entre les cartes. Dès que le curseur est activé, aucune autre fonctionnalité de la carte ne fonctionne correctement, notamment le zoom et le changement de fond de carte. De plus, l'image de comparaison présente des problèmes de projection et d'emprise, bien que les images soient identiques. Un autre problème est que l'image ne suit pas correctement le curseur, se décalant sur les extrémités, ce qui rend la comparaison imprécise. 
 
 Enfin, le scroller pour la légende ne fonctionne pas correctement, rendant difficile la navigation et l'affichage des informations associées à l'image.
+
+![Difficultés rencontrées ](readme_pictures/difficultes.jpg)
 
 Pour terminer, nous sommes relativement satisfaites de la réalisation de notre carte, bien qu'elle ne soit pas entièrement aboutie et que certaines fonctionnalités ne fonctionnent toujours pas correctement. Cependant, nous avons pu progresser et apprendre à surmonter les difficultés rencontrées.
