@@ -1,4 +1,4 @@
-# Réflexions sur le déroulement du projet
+# Description et réflexions sur le déroulement du projet
 Lorena Roulin et Marine Fiora
 Université de Lausanne, Mars 2024
 
@@ -335,9 +335,10 @@ Notre HTML devrait alors ressembler à ceci:
 Ces différents éléments peuvent également être modifiés dans le CSS pour un style visuellement plus agréable. Cependant, nous n'allons pas y revenir, car la méthode est identique à celle présentée plus haut. La même logique est ensuite utilisée pour les sélections des années, du mois et des scénarios climatiques. 
 
 ## 4.3 Bloquer le choix les scénarios
-Ces fonctions permettent de bloquer le choix des scénarios futurs lorsque les années actuelles sont sélectionnées. La fonction 'gererSelectionAnnee()' permet de bloquer le choix des scénarios de l'image de base et la fonction 'toggleScenarioSelection()' permet de bloquer ceux de l'image de comparaison. 
+Ces fonctions permettent de bloquer le choix des scénarios futurs lorsque les années actuelles sont sélectionnées. La fonction 'gererSelectionAnnee()' bloque le choix des scénarios pour l'image de base, tandis que la fonction 'toggleScenarioSelection()' bloque ceux pour l'image de comparaison.
 
 ```js
+// Bloque le choix des scénarios pour l'image de base
 function gererSelectionAnnee(){
     const anneeSelectionnee = document.getElementById("year-selection").value;
     const scenarioMenu = document.getElementById("scenario-selection");
@@ -351,6 +352,7 @@ function gererSelectionAnnee(){
     afficherSelectionOrigin();
   }
 
+// Bloque le choix des scénarios pour l'image de comparaison
 function toggleScenarioSelection() {
   const yearSelection = document.getElementById('comparison-year-selection');
   const scenarioSelection = document.getElementById('comparison-scenario-selection');
@@ -383,8 +385,7 @@ function toggleScenarioSelection() {
 ```
 
 ## 4.4 Créer les toggle pour la sélection de comparaison
-Expliquer 
-comparer = scénarios et la barre de comparaison qui apparait 
+Cette fonction permet que lorsque l'option de comparaison est sélectionnée, elle fait apparaître les différentes options de comparaison (facteur climatique, années de comparaison, les mois ainsi que les scénarios climatiques) ainsi que le curseur, qui s'affiche au centre de l'image.
 
 ```js
   const dragLine = document.querySelector(".slider .drag-line");
@@ -423,15 +424,12 @@ comparer = scénarios et la barre de comparaison qui apparait
   ```
 
 # 5. Afficher les différentes images 
-Afficher les différentes images en fonction des sélectionnés. 
-Comment les images sont nommées : 'facteurClimatique' - 'année' - 'mois' - 'scénario'
-En fonction de l'année sélectionnée, il va chercher avec un code différent (scénario ou pas)
-Une fois qu'il a trouvé l'image correspondante, il va créer un nouvel URL pour afficher l'image sur la carte.
-Le noveau URL sera affiché sur la map et qu'à chaque changement d'un des éléments, la carte se met dynamiquement à jour avec un nouvel URL.
-La même technique est utilisée pour les images de comparaison. 
+Cette fonction permet d'afficher les différentes images en fonction des options sélectionnées par l'utilisateur. Les images sont nommées selon une structure spécifique comprenant le facteur climatique, l'année, le mois, et le scénario. En fonction de l'année choisie (1991-2010 ou 2020-2049), le code détermine s'il doit utiliser un scénario ou non pour rechercher l'image correspondante. Une fois cette image identifiée, un nouvel URL est généré pour l'afficher sur la carte.
+
+Ce nouvel URL est ensuite chargé dynamiquement sur la carte, garantissant que chaque changement dans les sélections (facteur, année, mois, ou scénario) met immédiatement à jour la carte avec l'image correspondante. Cette même approche est également appliquée pour les images utilisées dans le cadre de la comparaison, permettant d'afficher les deux images côte à côte de manière cohérente.
 
 ```js
-// Créer le nom du fichier de l'image en fonction des sélections
+// Créer le nom du fichier de l'image en fonction des sélections de l'utilisateur de la carte
     let imageNom;
     if (annee === "91-10") {
       imageNom = `${facteurClimatique}_${annee}_${mois}.png`;
@@ -439,12 +437,12 @@ La même technique est utilisée pour les images de comparaison.
       imageNom = `${facteurClimatique}_${annee}_${mois}_${scenario}.png`;
     }
 
-    // Créer le chemin de l'image
+    // Créer le nouveau chemin de l'image à chaque fois que la sélection est modifiée
     const URLImage = `../cartes/${imageNom}`;
 ```
 
 # 6. Interactivité avec le slider
-Fonctionne avec un css, la valeur du slider elle va dans les deux extrémités de notre map (droit à gauche). Ce qui est lié avec le css est le 'imageComparison.style.clipPath' et dit que l'image sur la gauche va être clipée avec le slider/curseur. 
+Le fonctionnement du slider repose sur un lien avec le CSS. La position du curseur détermine une valeur qui s'étend d'une extrémité à l'autre de la carte (de droite à gauche). Cette interaction est gérée par la propriété 'imageComparison.style.clipPath' dans le CSS, qui contrôle la manière dont l'image située à gauche est "coupée" (ou clipée) en fonction de la position du slider. Cela permet de montrer dynamiquement les parties correspondantes des deux images affichées sur la carte, créant ainsi un effet de comparaison visuel. 
 
 ```js
 slider.addEventListener('input', (e) => {
@@ -458,18 +456,18 @@ slider.addEventListener('input', (e) => {
 ```
 
 # 7. Afficher les légendes
-! = si pas sélectionné = si rien sélectionné y'a rien qui s'affiche 
+Cette partie du code gère l'affichage des légendes en fonction des éléments sélectionnés et de la carte affichée. Les différentes options d'affichage des légendes sont détaillées dans le code ci-dessous.
 
 ```js
 // Fonction updateLegend qui utilise selectedComparisonValue
 function updateLegend() {
-  // Aucune sélection effectuée = rien qui s'affiche 
+  // Si aucune option n'est sélectionnée (!), rien ne s'affiche. Cela signifie que l'affichage des éléments est conditionné à la sélection d'une option spécifique. En l'absence de sélection, aucun contenu ou image ne sera visible.
   if (!selectedValue && !selectedComparisonValue && !comparisonCheckbox.checked) {
     legendDiv.innerHTML = '<p>Aucune donnée sélectionnée. Veuillez choisir une option.</p>';
     console.log("Aucune donnée sélectionnée.");
     return;
   }
-  // Si aucune des conditions ci-dessus n'est remplie, afficher les données non reconnues
+  // Si aucune des conditions mentionnées ci-dessus n'est remplie, les données non reconnues seront affichées.
   if (!selectedValue || !selectedComparisonValue) {
     legendDiv.innerHTML = '<p>Données non reconnues. Veuillez vérifier votre sélection.</p>';
     console.log("Données non reconnues.");
@@ -478,7 +476,7 @@ function updateLegend() {
   // Si le checkbox de comparaison n'est pas activé
   if (!comparisonCheckbox.checked) {
     console.log("Selected Data:", selectedValue);  // Vérifie la sélection des données
-    // Sélection des précipitations = légende des précipitations
+    // Lorsque le facteur climatique des précipitations est sélectionnée, la légende des précipitations s'affiche.
     if (selectedValue === 'precipitation') {
       legendDiv.innerHTML = `
         <h3>Évaluation des Précipitations</h3>
@@ -486,7 +484,7 @@ function updateLegend() {
         <img src="../readme_pictures/legende_precipitation.png" alt="Légende de précipitation" style="width:70%;">
       `;
       console.log("Affichage légende précipitations");
-      // Sélection des températures = légende des températures
+      // Lorsque le facteur climatique des températures est sélectionnée, la légende des températures s'affiche.
     } else if (selectedValue === 'temperature') {
       legendDiv.innerHTML = `
         <h3>Évaluation des Températures</h3>
@@ -497,8 +495,8 @@ function updateLegend() {
     }
   } else if (comparisonCheckbox.checked) {
     console.log("Checkbox activée. Comparaison des deux valeurs...");
-    // Si le checkbox de comparaison est activé, comparer les deux valeurs
-    // Sélection précipitations/précipitations
+    // Si la case à cocher de comparaison est activée, les deux valeurs sont comparées
+    // En cas de sélection des précipitations pour les deux images, la légende des précipitations s'affiche 
     if (selectedValue === 'precipitation' && selectedComparisonValue === 'comparison-precipitation') {
       console.log("Les deux sélections sont 'precipitation'. Affichage de la légende des précipitations uniquement.");
       legendDiv.innerHTML = `
@@ -506,7 +504,7 @@ function updateLegend() {
         <p>texte de la légende</p>
         <img src="../readme_pictures/legende_precipitation.png" alt="Légende de précipitation" style="width:70%;">
       `;
-      // Sélection températures/températures
+      // En cas de sélection des températures pour les deux images, la légende des températures s'affiche 
     } else if (selectedValue === 'temperature' && selectedComparisonValue === 'comparison-temperature') {
       console.log("Les deux sélections sont 'temperature'. Affichage de la légende des températures uniquement.");
       legendDiv.innerHTML = `
@@ -517,7 +515,7 @@ function updateLegend() {
     } else {
       console.log("Les sélections sont différentes ou non définies. Affichage des deux légendes.");
       console.log("selectedValue:", selectedValue, "| selectedComparisonValue:", selectedComparisonValue);
-      // Afficher les deux légendes si les deux sont sélectionnées mais ne correspondent pas
+      //En cas de sélection de la comparaison entre les températures et les précipitations, les deux légendes s'affichent simultanément.
       legendDiv.innerHTML = `
         <h3>Évaluation des Températures et Précipitations</h3>
         <img src="../readme_pictures/legende_temperature.png" alt="Légende de température" style="width:50%;">
@@ -529,7 +527,14 @@ function updateLegend() {
 ```
 
 # 8. Remarques, limites et difficultés
-Curseur comparatif entre les cartes, depuis le curseur plus rien fonctionne. Toutes les fonctonnalités de la map qui disfonctionnent = le zoom, changement de fond de carte, 
-Image de comparaison a une projection et une emprise bizarre = mais les image sont les mêmes. 
-Image ne suit pas le curseur, se décale sur les extrémités, l'image ne suit pas exactement le curseur 
-Le scoller = fonctionne pas pour la légende 
+Un certain nombre de difficultés ont été rencontrées durant la conception de cette carte.
+
+Premièrement, la recherche des données a été complexe, car nous n'avons pas trouvé tout de suite des données correspondant à nos besoins, notamment pour la réalisation des cartes. De plus, les volumes de données étaient relativement importants, ce qui a compliqué leur traitement.
+
+Ensuite, nous avons rencontré des difficultés pour faire correspondre les projections des images et du fond de carte, afin qu'elles se superposent correctement.
+
+L'utilisation de Git a également posé plusieurs problèmes durant la réalisation de notre travail. Cependant, nous avons réussi à l'utiliser à deux, mais seulement à la fin du projet.
+
+Enfin, plusieurs problèmes ont été rencontrés lors de l'utilisation du curseur comparatif entre les cartes. Dès que le curseur est activé, aucune autre fonctionnalité de la carte ne fonctionne correctement, notamment le zoom et le changement de fond de carte. De plus, l'image de comparaison présente des problèmes de projection et d'emprise, bien que les images soient identiques. Un autre problème est que l'image ne suit pas correctement le curseur, se décalant sur les extrémités, ce qui rend la comparaison imprécise. Enfin, le scroller pour la légende ne fonctionne pas correctement, rendant difficile la navigation et l'affichage des informations associées à l'image.
+
+Nous sommes relativement satisfaites de la réalisation de notre carte, bien qu'elle ne soit pas entièrement aboutie et que certaines fonctionnalités ne fonctionnent toujours pas correctement. Cependant, nous avons pu progresser et apprendre à surmonter les difficultés rencontrées.
