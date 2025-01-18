@@ -27,17 +27,17 @@ Ces données font partie de CHclim25, un ensemble de données climatiques pour l
 
 L’ensemble de données est dérivé d'un jeu de données à grille quotidienne avec une résolution de 1 km fourni par l'Office fédéral de météorologie et de climatologie (MeteoSwiss). Cette base a été affinée par une méthode de réduction d’échelle, appliquant des régressions locales avec un modèle d'élévation de 25 m de résolution pour mieux intégrer la topographie locale et les phénomènes climatiques complexes associés.
 
-Les couches climatiques sont disponibles au format geoTIFF pour la période de référence 1981-2010 ainsi que pour trois périodes futures (2020-2049, 2045-2074 et 2070-2099). Elles tiennent compte de trois modèles de circulation (GCM-RCM) et de trois scénarios de concentration représentatifs (RCP) issus de l’initiative CH2018.
+Les couches climatiques sont disponibles au format geoTIFF pour la période de référence 1981-2010 ainsi que pour trois périodes futures (2020-2049, 2045-2074 et 2070-2099). Elles tiennent compte de trois modèles de circulation (GCM-RCM) et de trois scénarios de concentration représentatifs (RCP) issus de l’initiative CH2018. 
 
 ## Données des précipitations 
 Lien des données des précipitations moyennes : https://zenodo.org/records/7868383
 
-Les données de précipitations proviennent de la grille quotidienne de 1 km de MétéoSuisse, réduite à une résolution de 25 m par interpolation bilinéaire. Les couches mensuelles et annuelles moyennes pour la période actuelle (1981-2010) et les périodes futures (2020-2049, 2045-2074, et 2070-2099) sont disponibles. 
+Les données de précipitations proviennent de la grille quotidienne de 1 km de MétéoSuisse, réduite à une résolution de 25 m par interpolation bilinéaire. Les couches mensuelles et annuelles moyennes pour la période actuelle (1981-2010) et les périodes futures (2020-2049, 2045-2074, et 2070-2099) sont disponibles. Cependant, pour notre carte, nous avons limité la période à celle s'étendant de 2020 à 2049 pour des raisons de temps et de praticité.
 
 ## Données des températures  
 Lien des données des températures moyennes : https://zenodo.org/records/7859252
 
-Les températures moyennes de l'air à 2 m sont issues d'un ensemble de données quotidien à 1 km de résolution de MétéoSuisse, ajusté à 25 m via une régression locale avec un modèle d'altitude. Les couches mensuelles et annuelles pour la période actuelle (1981-2010) et pour les futures moyennes (2020-2049, 2045-2074 et 2070-2099) sont disponibles. 
+Les températures moyennes de l'air à 2 m sont issues d'un ensemble de données quotidien à 1 km de résolution de MétéoSuisse, ajusté à 25 m via une régression locale avec un modèle d'altitude. Les couches mensuelles et annuelles pour la période actuelle (1981-2010) et pour les futures moyennes (2020-2049, 2045-2074 et 2070-2099) sont disponibles. Cependant, pour notre carte, nous avons limité la période à celle s'étendant de 2020 à 2049 pour des raisons de temps et de praticité.
 
 # Visuel la carte
 Tout d'abord, nous avons pris le temps de faire un croquis pour visualiser la carte souhaitée pour ce projet, ce qui nous a aidés à mieux nous projeter et à estimer le travail nécessaire pour la créer. Cela nous a également permis de déterminer par où commencer pour réaliser la carte. Par la réalisation de ce croquis, nuus avons également réalisé que nous avions vu un peu grand pour commencer, et que certaines choses prévues initialement n'ont pas pu être réalisées par manque de temps.
@@ -48,13 +48,14 @@ La carte interactive finale sera probablement présentée sous cette forme :
 ## Eléments de la carte
 Sur la gauche de la carte, nous retrouverons les informations fixes ; au centre se trouvera la carte et, à droite, les informations qui varient en fonction des sélections faites dans le menu de gauche.
 
-À gauche, nous trouverons plusieurs menus déroulants. Nous avons choisi d'opter pour des menus déroulants, notamment par souci de lisibilité. De cette manière, l'utilisateur pourra sélectionner plusieurs options, et seulement celles-ci apparaîtront. Il y a globalement trois choix pour l'utilisateur.
+À gauche, nous trouverons plusieurs menus déroulants. L'utilisateur pourra sélectionner plusieurs options, et seulement celles-ci apparaîtront. Il y a globalement quatre choix pour l'utilisateur.
 
 1. Le thème de la carte : précipitations ou températures.
 2. L'année : de référence 1981-2010 ou projections pour les années 2020-2049. 
-3. Le scénario du GIEC : RCP2.6, RCP4.5, RCP8.5. 
+3. Le mois : le mois de l'année peut être sélectionné 
+4. Le scénario du GIEC : RCP2.6, RCP4.5, RCP8.5. 
 
-Si l'utilisateur ne souhaite pas faire de projections futures, il peut sélectionner uniquement le thème de la carte, qui s'affichera alors avec la période de référence actuelle, soit 1981-2010. Pour obtenir des informations plus précises, il peut choisir d'activer les options 2 et 3.
+Si l'utilisateur ne souhaite pas faire de projections futures, il peut sélectionner uniquement le thème de la carte, qui s'affichera alors avec la période de référence actuelle, soit 1981-2010. Pour obtenir des informations plus précises, il peut choisir d'activer les options 2, 3 et 4.
 
 De plus, une option "Comparer" se trouve sous ces choix, permettant de créer un second ensemble de paramètres identique au premier. Ainsi, deux ensembles de choix pourront apparaître sur la carte pour faciliter la comparaison, directement visible grâce à une barre de défilement verticale qui sert de curseur. En déplaçant le curseur, les données de l'un ou l'autre choix sont affichées.
 
@@ -535,6 +536,8 @@ Ensuite, nous avons rencontré des difficultés pour faire correspondre les proj
 
 L'utilisation de Git a également posé plusieurs problèmes durant la réalisation de notre travail. Cependant, nous avons réussi à l'utiliser à deux, mais seulement à la fin du projet.
 
-Enfin, plusieurs problèmes ont été rencontrés lors de l'utilisation du curseur comparatif entre les cartes. Dès que le curseur est activé, aucune autre fonctionnalité de la carte ne fonctionne correctement, notamment le zoom et le changement de fond de carte. De plus, l'image de comparaison présente des problèmes de projection et d'emprise, bien que les images soient identiques. Un autre problème est que l'image ne suit pas correctement le curseur, se décalant sur les extrémités, ce qui rend la comparaison imprécise. Enfin, le scroller pour la légende ne fonctionne pas correctement, rendant difficile la navigation et l'affichage des informations associées à l'image.
+Puis, plusieurs problèmes ont été rencontrés lors de l'utilisation du curseur comparatif entre les cartes. Dès que le curseur est activé, aucune autre fonctionnalité de la carte ne fonctionne correctement, notamment le zoom et le changement de fond de carte. De plus, l'image de comparaison présente des problèmes de projection et d'emprise, bien que les images soient identiques. Un autre problème est que l'image ne suit pas correctement le curseur, se décalant sur les extrémités, ce qui rend la comparaison imprécise. 
 
-Nous sommes relativement satisfaites de la réalisation de notre carte, bien qu'elle ne soit pas entièrement aboutie et que certaines fonctionnalités ne fonctionnent toujours pas correctement. Cependant, nous avons pu progresser et apprendre à surmonter les difficultés rencontrées.
+Enfin, le scroller pour la légende ne fonctionne pas correctement, rendant difficile la navigation et l'affichage des informations associées à l'image.
+
+Pour terminer, nous sommes relativement satisfaites de la réalisation de notre carte, bien qu'elle ne soit pas entièrement aboutie et que certaines fonctionnalités ne fonctionnent toujours pas correctement. Cependant, nous avons pu progresser et apprendre à surmonter les difficultés rencontrées.
